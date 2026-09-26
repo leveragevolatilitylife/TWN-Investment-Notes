@@ -1,0 +1,244 @@
+/* ============================================================
+   LeverageVolatilityLife — 共用樣式表
+   給 /notes/ 底下的頁面(文章列表、文章範本)使用,
+   色彩與字體 token 與首頁 index.html 保持一致。
+   若之後想調整全站色彩,改這個檔案即可,不用一篇一篇改。
+   ============================================================ */
+
+:root{
+  --bg: #0a0e14;
+  --bg-panel: #10161d;
+  --bg-panel-hover: #131b23;
+  --border: #202932;
+  --border-soft: #171e26;
+  --text-primary: #e7edf3;
+  --text-secondary: #8a97a6;
+  --text-tertiary: #55626f;
+  --heading: #c9a688;
+  --accent: #c9805f;
+  --accent-rgb: 201,128,95;
+  --green: #34d399;
+  --green-dim: #16352a;
+  --amber: #fbbf24;
+  --amber-dim: #3a2f14;
+  --font-latin: 'Space Grotesk', sans-serif;
+  --font-zh: 'Noto Sans TC', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+
+body{
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-zh);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  background-image:
+    radial-gradient(ellipse 900px 500px at 15% -10%, rgba(var(--accent-rgb),0.07), transparent 60%),
+    radial-gradient(ellipse 700px 500px at 100% 10%, rgba(52,211,153,0.04), transparent 60%);
+  background-repeat: no-repeat;
+}
+
+a{ color:inherit; text-decoration:none; }
+
+.wrap{
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 28px;
+}
+.wrap.narrow{ max-width: 760px; }
+
+/* ---------- Header (與首頁共用) ---------- */
+header{ padding: 28px 0 0; }
+.header-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:10px 18px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-soft);
+}
+@media (max-width: 560px){ .meta-date{ display:none; } }
+@media (max-width: 380px){ .social .handle{ display:none; } }
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  color: var(--text-primary);
+}
+.brand .avatar{
+  width:34px; height:34px;
+  border-radius:50%;
+  object-fit:cover;
+  border: 1px solid var(--border);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb),0.15);
+  flex-shrink:0;
+}
+.brand b{ font-weight:600; }
+.header-right{ display:flex; align-items:center; gap:18px; }
+.meta-date{ font-family: var(--font-mono); font-size: 12px; color: var(--text-tertiary); }
+.social{ display:flex; align-items:center; gap:14px; font-family: var(--font-mono); font-size: 12px; }
+.social .handle{ color: var(--accent); letter-spacing: 0.01em; }
+.social a{ color: var(--text-tertiary); transition: color .2s ease; }
+.social a:hover{ color: var(--accent); }
+
+/* ---------- Page intro（列表頁 / 文章頁的標題區）---------- */
+.page-intro{ padding: 56px 0 8px; }
+.breadcrumb{
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--text-tertiary);
+  margin-bottom: 22px;
+  display:inline-block;
+}
+.breadcrumb:hover{ color: var(--accent); }
+.eyebrow-line{
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+.page-intro h1{
+  font-family: var(--font-zh);
+  font-weight: 900;
+  font-size: clamp(26px, 4.2vw, 38px);
+  line-height: 1.4;
+  color: var(--heading);
+  letter-spacing: 0.01em;
+}
+.page-intro p{
+  max-width: 560px;
+  margin-top: 14px;
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+/* ---------- 文章列表 ---------- */
+.note-list{
+  padding: 28px 0 56px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.note-item{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 22px 24px;
+  transition: transform .2s ease, border-color .2s ease, background .2s ease;
+}
+a.note-item:hover{
+  transform: translateY(-2px);
+  background: var(--bg-panel-hover);
+  border-color: var(--accent);
+}
+.note-item .row-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.note-item .date{
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-tertiary);
+  white-space:nowrap;
+}
+.note-item h2{
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.note-item .summary{
+  font-size: 13.5px;
+  color: var(--text-secondary);
+}
+.note-item .tags{ display:flex; flex-wrap:wrap; gap:6px; margin-top:2px; }
+.tag{
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--text-tertiary);
+  border: 1px solid var(--border);
+  padding: 2px 7px;
+  border-radius: 3px;
+}
+.note-empty{
+  padding: 40px 24px;
+  text-align:center;
+  color: var(--text-tertiary);
+  font-size: 14px;
+  border: 1px dashed var(--border);
+  border-radius: 6px;
+}
+
+/* ---------- 文章內文（template.html 用）---------- */
+.article-meta{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  flex-wrap:wrap;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin: 18px 0 40px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border-soft);
+}
+.prose{ padding-bottom: 72px; font-size: 15.5px; }
+.prose h2{
+  font-size: 21px;
+  color: var(--heading);
+  margin: 40px 0 14px;
+  font-weight: 700;
+}
+.prose h3{
+  font-size: 17px;
+  color: var(--text-primary);
+  margin: 28px 0 10px;
+  font-weight: 700;
+}
+.prose p{ margin: 0 0 16px; color: var(--text-primary); }
+.prose p.lead{ color: var(--text-secondary); font-size: 16.5px; }
+.prose ul, .prose ol{ margin: 0 0 16px 22px; color: var(--text-primary); }
+.prose li{ margin-bottom: 6px; }
+.prose blockquote{
+  border-left: 3px solid var(--accent);
+  padding: 4px 0 4px 18px;
+  color: var(--text-secondary);
+  margin: 20px 0;
+}
+.prose code{
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+.prose img{ max-width:100%; border-radius:6px; margin:20px 0; border:1px solid var(--border); }
+.prose hr{ border:none; border-top:1px solid var(--border-soft); margin:32px 0; }
+
+/* ---------- Footer（與首頁共用）---------- */
+footer{
+  border-top: 1px solid var(--border-soft);
+  padding: 24px 0 40px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+}
+footer .disclaimer{ font-size: 12.5px; color: var(--text-tertiary); max-width: 640px; }
+footer .links{ font-family: var(--font-mono); font-size: 12px; color: var(--text-tertiary); }

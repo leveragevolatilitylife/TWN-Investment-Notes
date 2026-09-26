@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>投資筆記｜Yung's Journey to FIRE</title>
+<meta name="description" content="策略邏輯、回測心得與市場觀察的長文紀錄。">
+<link rel="icon" href="avatar.jpg">
+<meta name="theme-color" content="#0a0e14">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="header-row">
+      <a class="brand" href="https://leveragevolatilitylife.github.io/" style="align-items:center;">
+        <img class="avatar" src="avatar.jpg" alt="LeverageVolatilityLife">
+        <b>Yung's Journey to FIRE｜Investing with Leverage &amp; Volatility</b>
+      </a>
+      <div class="header-right">
+        <div class="meta-date">TWSE · DAILY UPDATE</div>
+        <div class="social">
+          <span class="handle">@leverage_volatility_life</span>
+          <a href="https://www.instagram.com/leverage_volatility_life/" target="_blank" rel="noopener">IG</a>
+          <a href="https://www.threads.net/@leverage_volatility_life" target="_blank" rel="noopener">Threads</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="page-intro">
+    <a class="breadcrumb" href="https://leveragevolatilitylife.github.io/">← 回到入口</a>
+    <div class="eyebrow-line">NOTES</div>
+    <h1>投資筆記</h1>
+    <p>策略邏輯、回測心得與市場觀察的長文紀錄,依發布時間由新到舊排列。</p>
+  </section>
+
+  <section class="note-list" id="noteList">
+    <!-- 由 posts.json 動態產生,見下方 script -->
+  </section>
+
+  <footer>
+    <p class="disclaimer">本網站與所連結頁面之內容僅為個人資料整理與策略追蹤工具,不構成任何投資建議。</p>
+    <div class="links"><span id="footYear"></span></div>
+  </footer>
+</div>
+
+<script>
+  document.getElementById('footYear').textContent = new Date().getFullYear() + ' · Personal Project';
+
+  fetch('posts.json', { cache: 'no-store' })
+    .then(function(res){ return res.json(); })
+    .then(function(posts){
+      var list = document.getElementById('noteList');
+      if (!posts || posts.length === 0){
+        list.innerHTML = '<div class="note-empty">尚無文章,敬請期待 ···</div>';
+        return;
+      }
+      posts.sort(function(a,b){ return new Date(b.date) - new Date(a.date); });
+
+      list.innerHTML = posts.map(function(p){
+        var tags = (p.tags || []).map(function(t){ return '<span class="tag">' + t + '</span>'; }).join('');
+        return (
+          '<a class="note-item" href="' + p.slug + '.html">' +
+            '<div class="row-top">' +
+              '<h2>' + p.title + '</h2>' +
+              '<span class="date">' + p.date + '</span>' +
+            '</div>' +
+            '<p class="summary">' + p.summary + '</p>' +
+            '<div class="tags">' + tags + '</div>' +
+          '</a>'
+        );
+      }).join('');
+    })
+    .catch(function(){
+      document.getElementById('noteList').innerHTML =
+        '<div class="note-empty">尚無文章,敬請期待 ···</div>';
+    });
+</script>
+
+</body>
+</html>

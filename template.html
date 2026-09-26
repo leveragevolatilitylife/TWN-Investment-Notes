@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- ============================================================
+     文章範本使用說明:
+     1. 複製這個檔案,改名為 <slug>.html(slug 要跟 posts.json 裡的一致,
+        例如 2026-10-05-vix-signal-review.html)
+     2. 把下面標記 [TITLE] [DATE] [SUMMARY] [TAGS] [CONTENT] 的地方換成真正內容
+     3. 記得同步在 posts.json 加一筆對應資料
+     詳細步驟見「上傳流程」說明。
+     ============================================================ -->
+
+<title>[TITLE]｜投資筆記｜Yung's Journey to FIRE</title>
+<meta name="description" content="[SUMMARY]">
+<link rel="icon" href="avatar.jpg">
+<meta name="theme-color" content="#0a0e14">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+
+<div class="wrap narrow">
+  <header>
+    <div class="header-row">
+      <a class="brand" href="https://leveragevolatilitylife.github.io/" style="align-items:center;">
+        <img class="avatar" src="avatar.jpg" alt="LeverageVolatilityLife">
+        <b>Yung's Journey to FIRE｜Investing with Leverage &amp; Volatility</b>
+      </a>
+      <div class="header-right">
+        <div class="social">
+          <span class="handle">@leverage_volatility_life</span>
+          <a href="https://www.instagram.com/leverage_volatility_life/" target="_blank" rel="noopener">IG</a>
+          <a href="https://www.threads.net/@leverage_volatility_life" target="_blank" rel="noopener">Threads</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="page-intro" style="padding-top:48px;">
+    <a class="breadcrumb" href="index.html">← 回到投資筆記</a>
+    <div class="eyebrow-line">NOTES</div>
+    <h1>[TITLE]</h1>
+  </section>
+
+  <div class="article-meta">
+    <span>[DATE]</span>
+    <span>·</span>
+    <span>[TAGS,以頓號分隔]</span>
+  </div>
+
+  <article class="prose">
+    <p class="lead">[SUMMARY —— 一到兩句話的摘要,會顯示在列表頁的卡片上]</p>
+
+    <h2>小標題一</h2>
+    <p>[CONTENT —— 內文從這裡開始。可以用 h2 / h3 分段,p 寫段落。]</p>
+
+    <h2>小標題二</h2>
+    <p>可以用 <code>&lt;ul&gt;&lt;li&gt;</code> 做條列:</p>
+    <ul>
+      <li>重點一</li>
+      <li>重點二</li>
+    </ul>
+
+    <blockquote>需要強調的一句話或引用,可以放在這種區塊裡。</blockquote>
+
+    <!-- 若要放圖: <img src="images/xxx.png" alt="說明文字"> -->
+  </article>
+
+  <footer>
+    <p class="disclaimer">本網站與所連結頁面之內容僅為個人資料整理與策略追蹤工具,不構成任何投資建議。</p>
+    <div class="links"><span id="footYear"></span></div>
+  </footer>
+</div>
+
+<script>
+  document.getElementById('footYear').textContent = new Date().getFullYear() + ' · Personal Project';
+</script>
+
+</body>
+</html>
