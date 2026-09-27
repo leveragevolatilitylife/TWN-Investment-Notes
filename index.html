@@ -56,7 +56,8 @@
     .then(function(res){ return res.json(); })
     .then(function(posts){
       var list = document.getElementById('noteList');
-      if (!posts || posts.length === 0){
+      posts = (posts || []).filter(function(p){ return !p.hidden; });
+      if (posts.length === 0){
         list.innerHTML = '<div class="note-empty">尚無文章,敬請期待 ···</div>';
         return;
       }
