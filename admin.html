@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>後台發文｜投資筆記</title>
+<link rel="icon" href="avatar.jpg">
+<meta name="theme-color" content="#0a0e14">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  /* ---------- 後台專用樣式(不影響正式文章頁) ---------- */
+  .admin-wrap{ max-width: 1180px; padding-bottom: 60px; }
+
+  .admin-grid{
+    display:grid;
+    grid-template-columns: 1fr 300px;
+    gap: 26px;
+    padding-top: 32px;
+    align-items:start;
+  }
+  @media (max-width: 900px){
+    .admin-grid{ grid-template-columns: 1fr; }
+  }
+
+  /* -- 左側：編輯區 -- */
+  .editor-col{
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px 30px 36px;
+  }
+
+  .input-title, .input-subtitle{
+    display:block;
+    width:100%;
+    background:transparent;
+    border:none;
+    outline:none;
+    color: var(--heading);
+    font-family: var(--font-zh);
+    font-weight:900;
+  }
+  .input-title{
+    font-size: clamp(24px, 3.4vw, 32px);
+    margin-bottom: 10px;
+  }
+  .input-title::placeholder{ color: var(--text-tertiary); -webkit-text-fill-color: var(--text-tertiary); opacity:1; }
+  .input-subtitle{
+    font-size: 15px;
+    font-weight:400;
+    color: var(--text-secondary);
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border-soft);
+    margin-bottom: 18px;
+  }
+  .input-subtitle::placeholder{ color: var(--text-tertiary); }
+
+  .toolbar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:4px;
+    padding-bottom: 14px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .toolbar button{
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 6px 10px;
+    cursor:pointer;
+    transition: color .15s ease, border-color .15s ease;
+  }
+  .toolbar button:hover{ color: var(--accent); border-color: var(--accent); }
+  .toolbar .sep{ width:1px; background:var(--border); margin:2px 6px; }
+
+  .editor-body{
+    min-height: 420px;
+    outline:none;
+    font-size: 15.5px;
+  }
+  .editor-body.empty:before{
+    content: attr(data-placeholder);
+    color: var(--text-tertiary);
+  }
+  .editor-body img{ max-width:100%; }
+
+  /* -- 右側：設定欄 -- */
+  .panel{
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+    margin-bottom: 16px;
+  }
+  .panel h3{
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+    margin-bottom: 14px;
+  }
+  .field{ margin-bottom: 12px; }
+  .field label{
+    display:block;
+    font-size: 12px;
+    color: var(--text-tertiary);
+    margin-bottom: 5px;
+    font-family: var(--font-mono);
+  }
+  .field input{
+    width:100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 8px 10px;
+    color: var(--text-primary);
+    font-size: 13.5px;
+    font-family: var(--font-mono);
+  }
+  .field input:focus{ outline:none; border-color: var(--accent); }
+  .hint{
+    font-size: 11.5px;
+    color: var(--text-tertiary);
+    line-height:1.6;
+    margin-top: 8px;
+  }
+  .hint b{ color: var(--text-secondary); }
+
+  .btn{
+    width:100%;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 11px;
+    border-radius: 5px;
+    cursor:pointer;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    transition: border-color .15s ease, color .15s ease;
+  }
+  .btn:hover{ border-color: var(--text-secondary); color: var(--text-primary); }
+  .btn.primary{
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #14100d;
+    font-weight:600;
+  }
+  .btn.primary:hover{ filter: brightness(1.08); }
+  .btn:disabled{ opacity:.5; cursor:default; }
+
+  #statusMsg{
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    line-height:1.7;
+    padding: 12px 14px;
+    border-radius: 5px;
+    display:none;
+  }
+  #statusMsg.show{ display:block; }
+  #statusMsg.ok{ background: var(--green-dim); color: var(--green); }
+  #statusMsg.err{ background: #3a1616; color: #f87171; }
+  #statusMsg.busy{ background: var(--bg); color: var(--text-secondary); border:1px solid var(--border); }
+  #statusMsg a{ color:inherit; text-decoration:underline; }
+</style>
+</head>
+<body>
+
+<div class="wrap admin-wrap">
+  <header>
+    <div class="header-row">
+      <a class="brand" href="index.html" style="align-items:center;">
+        <img class="avatar" src="avatar.jpg" alt="LeverageVolatilityLife">
+        <b>後台發文 · 投資筆記</b>
+      </a>
+      <div class="header-right">
+        <a class="breadcrumb" href="index.html" style="margin:0;">← 回到文章列表</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="admin-grid">
+    <div class="editor-col">
+      <input id="fTitle" class="input-title" placeholder="文章標題" />
+      <input id="fSummary" class="input-subtitle" placeholder="副標題 / 摘要(會顯示在列表頁卡片上)" />
+
+      <div class="toolbar">
+        <button type="button" data-cmd="bold"><b>B</b></button>
+        <button type="button" data-cmd="italic"><i>I</i></button>
+        <span class="sep"></span>
+        <button type="button" data-block="H2">H2</button>
+        <button type="button" data-block="H3">H3</button>
+        <button type="button" data-block="P">P</button>
+        <button type="button" data-block="BLOCKQUOTE">quote</button>
+        <span class="sep"></span>
+        <button type="button" data-cmd="insertUnorderedList">• list</button>
+        <button type="button" data-cmd="insertOrderedList">1. list</button>
+        <span class="sep"></span>
+        <button type="button" id="btnLink">連結</button>
+        <button type="button" id="btnImage">插入圖片</button>
+        <span class="sep"></span>
+        <button type="button" data-cmd="undo">↺</button>
+        <button type="button" data-cmd="redo">↻</button>
+      </div>
+      <input type="file" id="fileImage" accept="image/*" style="display:none">
+
+      <div id="editor" class="editor-body prose" contenteditable="true" data-placeholder="開始寫內文…點工具列插入標題、引用或圖片"></div>
+    </div>
+
+    <aside>
+      <div class="panel">
+        <h3>發布設定</h3>
+        <div class="field">
+          <label>標籤(逗號分隔)</label>
+          <input id="fTags" placeholder="策略邏輯, 回測">
+        </div>
+        <div class="field">
+          <label>發布日期</label>
+          <input id="fDate" type="date">
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>GitHub 連線</h3>
+        <div class="field">
+          <label>Owner</label>
+          <input id="ghOwner" value="leveragevolatilitylife">
+        </div>
+        <div class="field">
+          <label>Repo</label>
+          <input id="ghRepo" value="TWN-Investment-Notes">
+        </div>
+        <div class="field">
+          <label>Branch</label>
+          <input id="ghBranch" value="main">
+        </div>
+        <div class="field">
+          <label>Personal Access Token</label>
+          <input id="ghToken" type="password" placeholder="ghp_...">
+        </div>
+        <p class="hint">Token 只會存在<b>你這台電腦的瀏覽器</b>裡(localStorage),直接呼叫 GitHub API,不會經過任何其他伺服器。建議用 Fine-grained token,只勾這個 repo、權限設 Contents: Read and write,並設過期日。</p>
+      </div>
+
+      <button class="btn" id="btnDraft">儲存草稿(僅本機)</button>
+      <button class="btn primary" id="btnPublish">發布到投資筆記</button>
+      <div id="statusMsg"></div>
+    </aside>
+  </div>
+</div>
+
+<script>
+(function(){
+  const editor = document.getElementById('editor');
+  const fTitle = document.getElementById('fTitle');
+  const fSummary = document.getElementById('fSummary');
+  const fTags = document.getElementById('fTags');
+  const fDate = document.getElementById('fDate');
+  const statusEl = document.getElementById('statusMsg');
+  const DRAFT_KEY = 'notes_admin_draft_v1';
+
+  fDate.value = new Date().toISOString().slice(0,10);
+
+  function refreshEmptyState(){
+    const isEmpty = editor.textContent.trim() === '' && !editor.querySelector('img');
+    editor.classList.toggle('empty', isEmpty);
+  }
+  refreshEmptyState();
+  editor.addEventListener('input', refreshEmptyState);
+
+  // ---------- 工具列 ----------
+  document.querySelectorAll('.toolbar [data-cmd]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      editor.focus();
+      document.execCommand(btn.dataset.cmd, false, null);
+    });
+  });
+  document.querySelectorAll('.toolbar [data-block]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      editor.focus();
+      document.execCommand('formatBlock', false, btn.dataset.block);
+    });
+  });
+  document.getElementById('btnLink').addEventListener('click', function(){
+    const url = prompt('連結網址(https://...)');
+    if (url) { editor.focus(); document.execCommand('createLink', false, url); }
+  });
+  document.getElementById('btnImage').addEventListener('click', function(){
+    document.getElementById('fileImage').click();
+  });
+  document.getElementById('fileImage').addEventListener('change', function(e){
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(){
+      editor.focus();
+      document.execCommand('insertImage', false, reader.result);
+      refreshEmptyState();
+    };
+    reader.readAsDataURL(file);
+    e.target.value = '';
+  });
+
+  // ---------- 草稿(本機) ----------
+  function collectDraft(){
+    return {
+      title: fTitle.value,
+      summary: fSummary.value,
+      tags: fTags.value,
+      date: fDate.value,
+      content: editor.innerHTML
+    };
+  }
+  function loadDraft(){
+    let raw;
+    try { raw = localStorage.getItem(DRAFT_KEY); } catch(e){ return; }
+    if (!raw) return;
+    try {
+      const d = JSON.parse(raw);
+      fTitle.value = d.title || '';
+      fSummary.value = d.summary || '';
+      fTags.value = d.tags || '';
+      if (d.date) fDate.value = d.date;
+      editor.innerHTML = d.content || '';
+      refreshEmptyState();
+      showStatus('busy', '已還原本機草稿。');
+    } catch(e){}
+  }
+  document.getElementById('btnDraft').addEventListener('click', function(){
+    try {
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(collectDraft()));
+      showStatus('ok', '草稿已存在這台電腦的瀏覽器裡。');
+    } catch(e){
+      showStatus('err', '草稿儲存失敗:' + e.message);
+    }
+  });
+  loadDraft();
+
+  // GitHub 連線設定也記住(token 另外存,方便下次打開直接用)
+  ['ghOwner','ghRepo','ghBranch','ghToken'].forEach(function(id){
+    const el = document.getElementById(id);
+    const key = 'notes_admin_' + id;
+    const saved = localStorage.getItem(key);
+    if (saved) el.value = saved;
+    el.addEventListener('change', function(){ localStorage.setItem(key, el.value); });
+  });
+
+  // ---------- 狀態訊息 ----------
+  function showStatus(kind, html){
+    statusEl.className = 'show ' + kind;
+    statusEl.innerHTML = html;
+  }
+
+  // ---------- 工具函式 ----------
+  function slugify(title, dateStr){
+    const ascii = title
+      .normalize('NFKD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-zA-Z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .toLowerCase();
+    return (dateStr + '-' + (ascii || 'post')).slice(0, 60);
+  }
+  function utf8ToBase64(str){
+    const bytes = new TextEncoder().encode(str);
+    let binary = '';
+    bytes.forEach(function(b){ binary += String.fromCharCode(b); });
+    return btoa(binary);
+  }
+  function base64ToUtf8(b64){
+    const binary = atob(b64.replace(/\n/g, ''));
+    const bytes = Uint8Array.from(binary, function(c){ return c.charCodeAt(0); });
+    return new TextDecoder().decode(bytes);
+  }
+
+  function ghHeaders(token){
+    return {
+      'Authorization': 'Bearer ' + token,
+      'Accept': 'application/vnd.github+json',
+      'X-GitHub-Api-Version': '2022-11-28'
+    };
+  }
+  async function ghGetFile(cfg, path){
+    const url = 'https://api.github.com/repos/' + cfg.owner + '/' + cfg.repo + '/contents/' + path + '?ref=' + cfg.branch;
+    const res = await fetch(url, { headers: ghHeaders(cfg.token) });
+    if (res.status === 404) return null;
+    if (!res.ok) throw new Error('讀取 ' + path + ' 失敗(' + res.status + ')');
+    return res.json();
+  }
+  async function ghPutFile(cfg, path, contentBase64, message, sha){
+    const url = 'https://api.github.com/repos/' + cfg.owner + '/' + cfg.repo + '/contents/' + path;
+    const body = { message: message, content: contentBase64, branch: cfg.branch };
+    if (sha) body.sha = sha;
+    const res = await fetch(url, {
+      method: 'PUT',
+      headers: Object.assign({ 'Content-Type': 'application/json' }, ghHeaders(cfg.token)),
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) {
+      const errBody = await res.json().catch(function(){ return {}; });
+      throw new Error('寫入 ' + path + ' 失敗(' + res.status + '):' + (errBody.message || res.statusText));
+    }
+    return res.json();
+  }
+
+  function buildPostHtml(opts){
+    // opts: title, date, tagsText, summary, contentHtml
+    return '<!DOCTYPE html>\n' +
+'<html lang="zh-Hant">\n' +
+'<head>\n' +
+'<meta charset="UTF-8">\n' +
+'<meta name="viewport" content="width=device-width, initial-scale=1">\n' +
+'<title>' + esc(opts.title) + '｜投資筆記｜Yung\'s Journey to FIRE</title>\n' +
+'<meta name="description" content="' + esc(opts.summary) + '">\n' +
+'<link rel="icon" href="avatar.jpg">\n' +
+'<meta name="theme-color" content="#0a0e14">\n' +
+'<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
+'<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
+'<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">\n' +
+'<link rel="stylesheet" href="assets/site.css">\n' +
+'</head>\n' +
+'<body>\n\n' +
+'<div class="wrap narrow">\n' +
+'  <header>\n' +
+'    <div class="header-row">\n' +
+'      <a class="brand" href="https://leveragevolatilitylife.github.io/" style="align-items:center;">\n' +
+'        <img class="avatar" src="avatar.jpg" alt="LeverageVolatilityLife">\n' +
+'        <b>Yung\'s Journey to FIRE｜Investing with Leverage &amp; Volatility</b>\n' +
+'      </a>\n' +
+'      <div class="header-right">\n' +
+'        <div class="social">\n' +
+'          <span class="handle">@leverage_volatility_life</span>\n' +
+'          <a href="https://www.instagram.com/leverage_volatility_life/" target="_blank" rel="noopener">IG</a>\n' +
+'          <a href="https://www.threads.net/@leverage_volatility_life" target="_blank" rel="noopener">Threads</a>\n' +
+'        </div>\n' +
+'      </div>\n' +
+'    </div>\n' +
+'  </header>\n\n' +
+'  <section class="page-intro" style="padding-top:48px;">\n' +
+'    <a class="breadcrumb" href="index.html">← 回到投資筆記</a>\n' +
+'    <div class="eyebrow-line">NOTES</div>\n' +
+'    <h1>' + esc(opts.title) + '</h1>\n' +
+'  </section>\n\n' +
+'  <div class="article-meta">\n' +
+'    <span>' + opts.date + '</span>\n' +
+'    <span>·</span>\n' +
+'    <span>' + esc(opts.tagsText || '未分類') + '</span>\n' +
+'  </div>\n\n' +
+'  <article class="prose">\n' +
+'    <p class="lead">' + esc(opts.summary) + '</p>\n' +
+'    ' + opts.contentHtml + '\n' +
+'  </article>\n\n' +
+'  <footer>\n' +
+'    <p class="disclaimer">本網站與所連結頁面之內容僅為個人資料整理與策略追蹤工具,不構成任何投資建議。</p>\n' +
+'    <div class="links"><span id="footYear"></span></div>\n' +
+'  </footer>\n' +
+'</div>\n\n' +
+'<script>\n' +
+'  document.getElementById(\'footYear\').textContent = new Date().getFullYear() + \' · Personal Project\';\n' +
+'<' + '/script>\n\n' +
+'</body>\n' +
+'</html>\n';
+  }
+  function esc(s){
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // ---------- 發布 ----------
+  document.getElementById('btnPublish').addEventListener('click', async function(){
+    const btn = this;
+    const cfg = {
+      owner: document.getElementById('ghOwner').value.trim(),
+      repo: document.getElementById('ghRepo').value.trim(),
+      branch: document.getElementById('ghBranch').value.trim() || 'main',
+      token: document.getElementById('ghToken').value.trim()
+    };
+    const title = fTitle.value.trim();
+    const summary = fSummary.value.trim();
+    const tagsText = fTags.value.trim();
+    const tags = tagsText ? tagsText.split(',').map(function(t){ return t.trim(); }).filter(Boolean) : [];
+    const dateStr = fDate.value || new Date().toISOString().slice(0,10);
+
+    if (!title){ showStatus('err', '請先填標題。'); return; }
+    if (!cfg.owner || !cfg.repo || !cfg.token){ showStatus('err', '請填寫 GitHub owner / repo / token。'); return; }
+
+    btn.disabled = true;
+    try {
+      showStatus('busy', '正在確認文章網址…');
+      let slug = slugify(title, dateStr);
+      // 避免檔名撞名
+      for (let i = 2; i < 20; i++){
+        const exists = await ghGetFile(cfg, slug + '.html');
+        if (!exists) break;
+        slug = slugify(title, dateStr) + '-' + i;
+      }
+
+      // 處理內文裡的圖片(base64 -> 上傳成檔案)
+      showStatus('busy', '正在處理圖片…');
+      const tmp = document.createElement('div');
+      tmp.innerHTML = editor.innerHTML;
+      const imgs = Array.prototype.slice.call(tmp.querySelectorAll('img[src^="data:"]'));
+      for (let i = 0; i < imgs.length; i++){
+        const img = imgs[i];
+        const match = /^data:(image\/[a-zA-Z0-9.+-]+);base64,(.*)$/.exec(img.getAttribute('src'));
+        if (!match) continue;
+        const mime = match[1];
+        const b64 = match[2];
+        const ext = (mime.split('/')[1] || 'png').replace('jpeg','jpg');
+        const filename = 'img-' + (i+1) + '.' + ext;
+        const path = 'assets/images/' + slug + '/' + filename;
+        showStatus('busy', '正在上傳圖片 ' + (i+1) + ' / ' + imgs.length + '…');
+        await ghPutFile(cfg, path, b64, '新增文章圖片: ' + slug + '/' + filename);
+        img.setAttribute('src', path);
+        img.removeAttribute('style');
+      }
+      const contentHtml = tmp.innerHTML;
+
+      // 建立文章 HTML 並上傳
+      showStatus('busy', '正在建立文章頁面…');
+      const postHtml = buildPostHtml({ title: title, date: dateStr, tagsText: tags.join('、'), summary: summary, contentHtml: contentHtml });
+      await ghPutFile(cfg, slug + '.html', utf8ToBase64(postHtml), '新增文章: ' + title);
+
+      // 更新 posts.json
+      showStatus('busy', '正在更新文章列表…');
+      const postsFile = await ghGetFile(cfg, 'posts.json');
+      let posts = [];
+      let sha = undefined;
+      if (postsFile){
+        posts = JSON.parse(base64ToUtf8(postsFile.content));
+        sha = postsFile.sha;
+      }
+      posts.unshift({ slug: slug, title: title, date: dateStr, summary: summary, tags: tags });
+      await ghPutFile(cfg, 'posts.json', utf8ToBase64(JSON.stringify(posts, null, 2) + '\n'), '更新文章列表: ' + title, sha);
+
+      const liveUrl = 'https://' + cfg.owner + '.github.io/' + cfg.repo + '/' + slug + '.html';
+      showStatus('ok', '發布成功!GitHub Pages 重新部署約需 1 分鐘。<br>完成後可到 <a href="' + liveUrl + '" target="_blank">' + liveUrl + '</a> 查看。');
+
+      try { localStorage.removeItem(DRAFT_KEY); } catch(e){}
+      fTitle.value = ''; fSummary.value = ''; fTags.value = '';
+      editor.innerHTML = ''; refreshEmptyState();
+
+    } catch(err){
+      showStatus('err', '發布失敗:' + err.message);
+    } finally {
+      btn.disabled = false;
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
