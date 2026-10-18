@@ -107,6 +107,45 @@
   }
   .toolbar button:hover{ color: var(--accent); border-color: var(--accent); }
   .toolbar .sep{ width:1px; background:var(--border); margin:2px 6px; }
+  .toolbar .btn-align{ font-size:14px; line-height:1; padding:5px 9px; }
+  .tb-select{
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--text-secondary);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 6px 6px;
+    cursor:pointer;
+    max-width: 92px;
+  }
+  .tb-select:hover{ border-color: var(--accent); color: var(--accent); }
+  .tb-color{
+    display:flex;
+    align-items:center;
+    gap:4px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 4px 8px;
+    cursor:pointer;
+  }
+  .tb-color:hover{ border-color: var(--accent); }
+  .tb-color input[type="color"]{
+    width:18px; height:18px;
+    padding:0;
+    border:none;
+    background:none;
+    cursor:pointer;
+  }
+  .tb-color .hl-swatch{
+    display:inline-block;
+    padding:0 2px;
+    border-radius:2px;
+    background: rgba(251,191,36,0.3);
+  }
 
   .editor-body{
     min-height: 420px;
@@ -279,16 +318,45 @@
       <input id="fSummary" class="input-subtitle" placeholder="副標題 / 摘要(會顯示在列表頁卡片上)" />
 
       <div class="toolbar">
+        <select id="selFontFamily" class="tb-select" title="字型">
+          <option value="">字型</option>
+          <option value="'Noto Sans TC', sans-serif">內文(預設)</option>
+          <option value="'Space Grotesk', sans-serif">標題感</option>
+          <option value="'JetBrains Mono', monospace">等寬</option>
+          <option value="Georgia, 'Noto Serif TC', serif">襯線</option>
+        </select>
+        <select id="selFontSize" class="tb-select" title="字級">
+          <option value="">字級</option>
+          <option value="13px">小</option>
+          <option value="15.5px">預設</option>
+          <option value="18px">中</option>
+          <option value="22px">大</option>
+          <option value="28px">特大</option>
+        </select>
+        <span class="sep"></span>
         <button type="button" data-cmd="bold"><b>B</b></button>
         <button type="button" data-cmd="italic"><i>I</i></button>
         <span class="sep"></span>
-        <button type="button" data-block="H2">H2</button>
-        <button type="button" data-block="H3">H3</button>
-        <button type="button" data-block="P">P</button>
-        <button type="button" data-block="BLOCKQUOTE">quote</button>
+        <button type="button" data-block="H2">大標</button>
+        <button type="button" data-block="H3">小標</button>
+        <button type="button" data-block="P">正文</button>
+        <button type="button" data-block="BLOCKQUOTE">引用</button>
         <span class="sep"></span>
         <button type="button" data-cmd="insertUnorderedList">• list</button>
         <button type="button" data-cmd="insertOrderedList">1. list</button>
+        <span class="sep"></span>
+        <button type="button" data-align="left" class="btn-align" title="靠左">⯇</button>
+        <button type="button" data-align="center" class="btn-align" title="置中">☰</button>
+        <button type="button" data-align="right" class="btn-align" title="靠右">⯈</button>
+        <button type="button" data-align="justify" class="btn-align" title="左右對齊">≡</button>
+        <span class="sep"></span>
+        <label class="tb-color" title="文字顏色">
+          A<input type="color" id="inpFontColor" value="#e7edf3">
+        </label>
+        <label class="tb-color" title="醒目顏色">
+          <span class="hl-swatch">H</span><input type="color" id="inpHiliteColor" value="#fbbf24">
+        </label>
+        <button type="button" id="btnClearHilite" title="清除醒目">清除醒目</button>
         <span class="sep"></span>
         <button type="button" id="btnLink">連結</button>
         <button type="button" id="btnImage">插入圖片</button>
@@ -385,6 +453,63 @@
       document.execCommand('formatBlock', false, btn.dataset.block);
     });
   });
+  document.querySelectorAll('.toolbar [data-align]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      editor.focus();
+      const cmd = { left: 'justifyLeft', center: 'justifyCenter', right: 'justifyRight', justify: 'justifyFull' }[btn.dataset.align];
+      document.execCommand(cmd, false, null);
+    });
+  });
+
+  // 字型
+  document.getElementById('selFontFamily').addEventListener('change', function(){
+    if (!this.value) return;
+    editor.focus();
+    document.execCommand('fontName', false, this.value);
+    this.selectedIndex = 0;
+  });
+
+  // 字級(先用 execCommand 的 font size=7 佔位,再把 <font size="7"> 轉成實際 px 的 span)
+  document.getElementById('selFontSize').addEventListener('change', function(){
+    if (!this.value) return;
+    const px = this.value;
+    editor.focus();
+    document.execCommand('fontSize', false, '7');
+    editor.querySelectorAll('font[size="7"]').forEach(function(el){
+      el.removeAttribute('size');
+      el.style.fontSize = px;
+    });
+    this.selectedIndex = 0;
+  });
+
+  // 文字顏色
+  document.getElementById('inpFontColor').addEventListener('input', function(){
+    editor.focus();
+    document.execCommand('foreColor', false, this.value);
+  });
+
+  // 醒目顏色(標記)
+  document.getElementById('inpHiliteColor').addEventListener('input', function(){
+    editor.focus();
+    try {
+      if (!document.execCommand('hiliteColor', false, this.value)) {
+        document.execCommand('backColor', false, this.value);
+      }
+    } catch(e){
+      document.execCommand('backColor', false, this.value);
+    }
+  });
+  document.getElementById('btnClearHilite').addEventListener('click', function(){
+    editor.focus();
+    try {
+      if (!document.execCommand('hiliteColor', false, 'transparent')) {
+        document.execCommand('backColor', false, 'transparent');
+      }
+    } catch(e){
+      document.execCommand('backColor', false, 'transparent');
+    }
+  });
+
   document.getElementById('btnLink').addEventListener('click', function(){
     const url = prompt('連結網址(https://...)');
     if (url) { editor.focus(); document.execCommand('createLink', false, url); }
