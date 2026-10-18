@@ -19,7 +19,7 @@
     grid-template-columns: 1fr 300px;
     gap: 26px;
     padding-top: 32px;
-    align-items:stretch;
+    align-items:start;
   }
   @media (max-width: 900px){
     .admin-grid{ grid-template-columns: 1fr; }
@@ -34,14 +34,13 @@
     position:relative;
     display:flex;
     flex-direction:column;
-    min-height:0;
   }
   .editor-wrapper{
     position:relative;
     display:flex;
     gap:12px;
-    flex:1;
-    min-height:0;
+    /* 實際高度由 JS 的 syncEditorHeight() 直接設定固定 px,
+       對齊右欄「發布到投資筆記」按鈕下緣,不依賴 CSS 自動撐滿 */
   }
   .progress-track{
     flex-shrink:0;
@@ -210,13 +209,6 @@
   .editor-body img{ max-width:100%; }
 
   /* -- 右側：設定欄 -- */
-  .admin-grid > aside{
-    display:flex;
-    flex-direction:column;
-  }
-  .admin-grid > aside .panel:last-of-type{
-    flex:1;
-  }
   .panel{
     background: var(--bg-panel);
     border: 1px solid var(--border);
