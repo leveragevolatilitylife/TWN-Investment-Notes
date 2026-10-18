@@ -34,6 +34,7 @@
     position:relative;
     display:flex;
     flex-direction:column;
+    min-height:0;
   }
   .editor-wrapper{
     position:relative;
@@ -299,49 +300,6 @@
   #manageStatus.err{ background: #3a1616; color: #f87171; }
   #manageStatus.busy{ background: var(--bg); color: var(--text-secondary); border:1px solid var(--border); }
 
-  /* -- 頁面捲軸 -- */
-  .page-outline{
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-    max-height: 150px;
-    overflow-y:auto;
-    margin-bottom: 12px;
-    font-size: 11.5px;
-    color: var(--text-tertiary);
-  }
-  .page-outline a{
-    color: var(--text-secondary);
-    transition: color .15s ease;
-    padding: 3px 6px;
-    border-radius: 2px;
-    cursor:pointer;
-  }
-  .page-outline a:hover{ color: var(--accent); background: rgba(var(--accent-rgb),0.1); }
-  .page-outline .h2-link{ padding-left: 8px; font-weight:500; }
-  .page-outline .h3-link{ padding-left: 18px; font-size: 10.5px; opacity:0.85; }
-  .page-outline .p-link{ padding-left: 18px; font-size: 10px; opacity:0.6; max-width: 100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-
-  .mini-scrollbar{
-    width:100%;
-    height: 60px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    position:relative;
-    overflow:hidden;
-  }
-  .scroll-thumb{
-    position:absolute;
-    left:0;
-    right:0;
-    height: 8px;
-    background: var(--accent);
-    border-radius: 2px;
-    top: 0;
-    opacity:0.7;
-    transition: top .05s ease;
-  }
 
   /* -- 文章管理 -- */
   .manage-panel{ margin-top: 24px; }
@@ -477,16 +435,6 @@
 
     <aside>
       <div class="panel">
-        <h3>頁面捲軸</h3>
-        <div id="pageOutline" class="page-outline">
-          <!-- 動態生成的大綱 -->
-        </div>
-        <div id="scrollbar" class="mini-scrollbar">
-          <div id="scrollThumb" class="scroll-thumb"></div>
-        </div>
-      </div>
-
-      <div class="panel">
         <h3>發布設定</h3>
         <div class="field">
           <label>標籤(逗號分隔)</label>
@@ -581,73 +529,6 @@
   window.addEventListener('resize', updateProgressBar);
   updateProgressBar();
 
-  // ---------- 頁面捲軸 ----------
-  const pageOutlineEl = document.getElementById('pageOutline');
-  const scrollThumb = document.getElementById('scrollThumb');
-
-  function updatePageOutline(){
-    const headings = editor.querySelectorAll('h2, h3');
-    const paragraphs = Array.from(editor.querySelectorAll('p')).filter(function(p){
-      return p.textContent.trim().length > 0 && !p.closest('blockquote');
-    });
-
-    let html = '';
-    let headingCount = 0;
-
-    headings.forEach(function(h, idx){
-      const text = h.textContent.trim().substring(0, 40);
-      const cls = h.tagName === 'H2' ? 'h2-link' : 'h3-link';
-      html += '<a class="' + cls + '" data-outline-idx="' + idx + '">' + text + (text.length < h.textContent.trim().length ? '...' : '') + '</a>';
-      headingCount++;
-    });
-
-    if (paragraphs.length > 0 && headingCount < 8){
-      paragraphs.slice(0, Math.min(3, 8 - headingCount)).forEach(function(p, idx){
-        const text = p.textContent.trim().substring(0, 35);
-        html += '<a class="p-link" data-outline-p-idx="' + idx + '">' + text + (text.length < p.textContent.trim().length ? '...' : '') + '</a>';
-      });
-    }
-
-    if (html.length === 0){
-      pageOutlineEl.innerHTML = '<div style="color:var(--text-tertiary); font-size:11px; opacity:0.7;">還沒有標題或段落...</div>';
-    } else {
-      pageOutlineEl.innerHTML = html;
-      pageOutlineEl.querySelectorAll('[data-outline-idx]').forEach(function(link){
-        const idx = parseInt(link.dataset.outlineIdx);
-        link.addEventListener('click', function(){
-          const heading = Array.from(headings)[idx];
-          if (heading) heading.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        });
-      });
-      pageOutlineEl.querySelectorAll('[data-outline-p-idx]').forEach(function(link){
-        const idx = parseInt(link.dataset.outlinePIdx);
-        link.addEventListener('click', function(){
-          const p = paragraphs[idx];
-          if (p) p.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        });
-      });
-    }
-  }
-
-  function updateScrollThumb(){
-    if (editor.scrollHeight <= editor.clientHeight){
-      scrollThumb.style.height = '100%';
-      scrollThumb.style.top = '0';
-      return;
-    }
-    const scrollRatio = editor.clientHeight / editor.scrollHeight;
-    const thumbHeight = Math.max(8, scrollRatio * 60);
-    const thumbTop = (editor.scrollTop / editor.scrollHeight) * 60;
-    scrollThumb.style.height = thumbHeight + 'px';
-    scrollThumb.style.top = thumbTop + 'px';
-  }
-
-  editor.addEventListener('scroll', updateScrollThumb);
-  editor.addEventListener('input', updatePageOutline);
-  editor.addEventListener('input', updateScrollThumb);
-  window.addEventListener('resize', updateScrollThumb);
-  updatePageOutline();
-  updateScrollThumb();
 
   // ---------- 工具列 ----------
   document.querySelectorAll('.toolbar [data-cmd]').forEach(function(btn){
