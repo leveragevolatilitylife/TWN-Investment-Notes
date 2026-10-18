@@ -33,6 +33,34 @@
     padding: 28px 30px 36px;
   }
 
+  .edit-banner{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--accent);
+    background: rgba(var(--accent-rgb), 0.08);
+    border: 1px solid var(--accent);
+    border-radius: 5px;
+    padding: 9px 13px;
+    margin-bottom: 18px;
+  }
+  .edit-banner #editBannerTitle{ color: var(--text-primary); font-weight:600; margin-left:4px; }
+  .edit-banner button{
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--text-secondary);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 4px 9px;
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  .edit-banner button:hover{ color: var(--text-primary); border-color: var(--text-secondary); }
+
   .input-title, .input-subtitle{
     display:block;
     width:100%;
@@ -243,6 +271,10 @@
 
   <div class="admin-grid">
     <div class="editor-col">
+      <div id="editBanner" class="edit-banner" style="display:none;">
+        正在編輯:<span id="editBannerTitle"></span>
+        <button type="button" id="btnCancelEdit">取消,改寫新文章</button>
+      </div>
       <input id="fTitle" class="input-title" placeholder="文章標題" />
       <input id="fSummary" class="input-subtitle" placeholder="副標題 / 摘要(會顯示在列表頁卡片上)" />
 
@@ -571,18 +603,27 @@
     if (!title){ showStatus('err', '請先填標題。'); return; }
     if (!cfg.owner || !cfg.repo || !cfg.token){ showStatus('err', '請填寫 GitHub owner / repo / token。'); return; }
 
+    const isEdit = !!editingSlug;
     btn.disabled = true;
     try {
-      showStatus('busy', '正在確認文章網址…');
-      let slug = slugify(title, dateStr);
-      // 避免檔名撞名
-      for (let i = 2; i < 20; i++){
-        const exists = await ghGetFile(cfg, slug + '.html');
-        if (!exists) break;
-        slug = slugify(title, dateStr) + '-' + i;
+      let slug = editingSlug;
+      let existingPostSha = undefined;
+      if (isEdit){
+        showStatus('busy', '正在讀取原文章…');
+        const existing = await ghGetFile(cfg, slug + '.html');
+        if (existing) existingPostSha = existing.sha;
+      } else {
+        showStatus('busy', '正在確認文章網址…');
+        slug = slugify(title, dateStr);
+        // 避免檔名撞名
+        for (let i = 2; i < 20; i++){
+          const exists = await ghGetFile(cfg, slug + '.html');
+          if (!exists) break;
+          slug = slugify(title, dateStr) + '-' + i;
+        }
       }
 
-      // 處理內文裡的圖片(base64 -> 上傳成檔案)
+      // 處理內文裡的圖片(base64 -> 上傳成檔案;既有圖片路徑原樣保留)
       showStatus('busy', '正在處理圖片…');
       const tmp = document.createElement('div');
       tmp.innerHTML = editor.innerHTML;
@@ -604,9 +645,9 @@
       const contentHtml = tmp.innerHTML;
 
       // 建立文章 HTML 並上傳
-      showStatus('busy', '正在建立文章頁面…');
+      showStatus('busy', isEdit ? '正在更新文章頁面…' : '正在建立文章頁面…');
       const postHtml = buildPostHtml({ title: title, date: dateStr, tagsText: tags.join('、'), summary: summary, contentHtml: contentHtml });
-      await ghPutFile(cfg, slug + '.html', utf8ToBase64(postHtml), '新增文章: ' + title);
+      await ghPutFile(cfg, slug + '.html', utf8ToBase64(postHtml), (isEdit ? '更新文章: ' : '新增文章: ') + title, existingPostSha);
 
       // 更新 posts.json
       showStatus('busy', '正在更新文章列表…');
@@ -617,18 +658,32 @@
         posts = JSON.parse(base64ToUtf8(postsFile.content));
         sha = postsFile.sha;
       }
-      posts.unshift({ slug: slug, title: title, date: dateStr, summary: summary, tags: tags });
-      await ghPutFile(cfg, 'posts.json', utf8ToBase64(JSON.stringify(posts, null, 2) + '\n'), '更新文章列表: ' + title, sha);
+      let savedEntry;
+      if (isEdit){
+        const idx = posts.findIndex(function(p){ return p.slug === slug; });
+        const prevHidden = idx > -1 ? posts[idx].hidden : undefined;
+        savedEntry = { slug: slug, title: title, date: dateStr, summary: summary, tags: tags };
+        if (prevHidden) savedEntry.hidden = true;
+        if (idx > -1) posts[idx] = savedEntry; else posts.unshift(savedEntry);
+      } else {
+        savedEntry = { slug: slug, title: title, date: dateStr, summary: summary, tags: tags };
+        posts.unshift(savedEntry);
+      }
+      const postsRes = await ghPutFile(cfg, 'posts.json', utf8ToBase64(JSON.stringify(posts, null, 2) + '\n'), (isEdit ? '更新文章列表: ' : '新增文章列表: ') + title, sha);
+
+      // 同步「文章管理」清單裡的資料,不用再手動重新整理
+      currentPosts = posts;
+      currentPostsSha = postsRes.content.sha;
+      renderManageList();
 
       const liveUrl = 'https://' + cfg.owner + '.github.io/' + cfg.repo + '/' + slug + '.html';
-      showStatus('ok', '發布成功!GitHub Pages 重新部署約需 1 分鐘。<br>完成後可到 <a href="' + liveUrl + '" target="_blank">' + liveUrl + '</a> 查看。');
+      showStatus('ok', (isEdit ? '更新成功!' : '發布成功!') + 'GitHub Pages 重新部署約需 1 分鐘。<br>完成後可到 <a href="' + liveUrl + '" target="_blank">' + liveUrl + '</a> 查看。');
 
       try { localStorage.removeItem(DRAFT_KEY); } catch(e){}
-      fTitle.value = ''; fSummary.value = ''; fTags.value = '';
-      editor.innerHTML = ''; refreshEmptyState();
+      exitEditMode();
 
     } catch(err){
-      showStatus('err', '發布失敗:' + err.message);
+      showStatus('err', (isEdit ? '更新失敗:' : '發布失敗:') + err.message);
     } finally {
       btn.disabled = false;
     }
@@ -638,12 +693,41 @@
   const manageListEl = document.getElementById('manageList');
   const manageStatusEl = document.getElementById('manageStatus');
   let currentPostsSha = null;
+  let editingSlug = null;
   let currentPosts = [];
 
   function showManageStatus(kind, html){
     manageStatusEl.className = 'show ' + kind;
     manageStatusEl.innerHTML = html;
   }
+
+  const editBanner = document.getElementById('editBanner');
+  const editBannerTitle = document.getElementById('editBannerTitle');
+  const btnPublishEl = document.getElementById('btnPublish');
+
+  function enterEditMode(post, contentHtml){
+    editingSlug = post.slug;
+    fTitle.value = post.title || '';
+    fSummary.value = post.summary || '';
+    fTags.value = (post.tags || []).join(', ');
+    fDate.value = post.date || fDate.value;
+    editor.innerHTML = contentHtml || '';
+    refreshEmptyState();
+    editBannerTitle.textContent = post.title;
+    editBanner.style.display = 'flex';
+    btnPublishEl.textContent = '更新文章';
+    try { localStorage.removeItem(DRAFT_KEY); } catch(e){}
+    document.querySelector('.editor-col').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function exitEditMode(){
+    editingSlug = null;
+    editBanner.style.display = 'none';
+    btnPublishEl.textContent = '發布到投資筆記';
+    fTitle.value = ''; fSummary.value = ''; fTags.value = '';
+    fDate.value = new Date().toISOString().slice(0,10);
+    editor.innerHTML = ''; refreshEmptyState();
+  }
+  document.getElementById('btnCancelEdit').addEventListener('click', exitEditMode);
 
   function renderManageList(){
     if (!currentPosts.length){
@@ -659,6 +743,7 @@
             '<div class="mi-meta">' + p.date + ' · ' + p.slug + '.html</div>' +
           '</div>' +
           '<div class="mi-actions">' +
+            '<button type="button" class="btn-edit">編輯</button>' +
             '<button type="button" class="btn-toggle">' + (p.hidden ? '顯示' : '隱藏') + '</button>' +
             '<button type="button" class="btn-delete danger">刪除</button>' +
           '</div>' +
@@ -690,6 +775,25 @@
     if (!post) return;
     const cfg = currentCfg();
     if (!cfg.token){ showManageStatus('err', '請先填寫 GitHub Token。'); return; }
+
+    if (e.target.classList.contains('btn-edit')){
+      showManageStatus('busy', '正在載入文章內容…');
+      try {
+        const postFile = await ghGetFile(cfg, slug + '.html');
+        if (!postFile) throw new Error('找不到 ' + slug + '.html');
+        const html = base64ToUtf8(postFile.content);
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        const article = doc.querySelector('article.prose');
+        if (!article) throw new Error('無法解析這篇文章的內容區塊');
+        const lead = article.querySelector('p.lead');
+        if (lead) lead.remove();
+        enterEditMode(post, article.innerHTML.trim());
+        showManageStatus('ok', '已載入「' + esc(post.title) + '」,可以在上方編輯。');
+      } catch(err){
+        showManageStatus('err', '載入失敗:' + err.message);
+      }
+      return;
+    }
 
     if (e.target.classList.contains('btn-toggle')){
       post.hidden = !post.hidden;
