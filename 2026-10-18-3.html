@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>波動率投資策略(3)-波動率投資的機會與挑戰｜投資筆記｜Yung's Journey to FIRE</title>
+<meta name="description" content="前兩章我們認識了 VIX 指數、VIX 期貨，以及各式各樣的 VIX 相關 ETP。這一章要回答的是更實際的問題：這個和一般股市迥異的交易生態，究竟藏著什麼機會，又埋著什麼陷阱？ 本章依序會談到：VIX 相關 ETP 與大盤的相關性和 Beta、長期做多 VIX 為什麼是「傾家盪產」、做空 VIX 的優勢來自哪裡、做空 VIX 最大的夢魘「波動率末日」，以及最後的解決方向：輪換策略。">
+<link rel="icon" href="avatar.jpg">
+<meta name="theme-color" content="#0a0e14">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+
+<div class="wrap narrow">
+  <header>
+    <div class="header-row">
+      <a class="brand" href="https://leveragevolatilitylife.github.io/" style="align-items:center;">
+        <img class="avatar" src="avatar.jpg" alt="LeverageVolatilityLife">
+        <b>Yung's Journey to FIRE｜Investing with Leverage &amp; Volatility</b>
+      </a>
+      <div class="header-right">
+        <div class="social">
+          <span class="handle">@leverage_volatility_life</span>
+          <a href="https://www.instagram.com/leverage_volatility_life/" target="_blank" rel="noopener">IG</a>
+          <a href="https://www.threads.net/@leverage_volatility_life" target="_blank" rel="noopener">Threads</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="page-intro" style="padding-top:48px;">
+    <a class="breadcrumb" href="index.html">← 回到投資筆記</a>
+    <div class="eyebrow-line">NOTES</div>
+    <h1>波動率投資策略(3)-波動率投資的機會與挑戰</h1>
+  </section>
+
+  <div class="article-meta">
+    <span>2026-10-18</span>
+    <span>·</span>
+    <span>波動率投資策略</span>
+  </div>
+
+  <article class="prose">
+    <p class="lead">前兩章我們認識了 VIX 指數、VIX 期貨，以及各式各樣的 VIX 相關 ETP。這一章要回答的是更實際的問題：這個和一般股市迥異的交易生態，究竟藏著什麼機會，又埋著什麼陷阱？ 本章依序會談到：VIX 相關 ETP 與大盤的相關性和 Beta、長期做多 VIX 為什麼是「傾家盪產」、做空 VIX 的優勢來自哪裡、做空 VIX 最大的夢魘「波動率末日」，以及最後的解決方向：輪換策略。</p>
+    <div style="text-align: center;"><span style="color: rgb(199, 167, 139);"><font face="Space Grotesk, sans-serif"><b>免責聲明</b></font></span></div><div><span style="color: rgb(199, 167, 139);"><font face="Space Grotesk, sans-serif" style="font-size: 13px;">本文僅為個人研究與經驗分享，非任何形式之投資建議或承諾。所有金融商品皆具一定程度風險，可能導致重大虧損，讀者須自行評估並負擔個人決策全部後果。內容所涉標的僅供參考，過往績效不代表未來表現。本人不對任何依據本文進行之投資行為負責，請務必審慎判斷。</font></span></div><div><span style="color: rgb(199, 167, 139);"><font face="Space Grotesk, sans-serif" style="font-size: 13px;"><br></font></span></div><div><h1><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;
+mso-hansi-font-family:Calibri">一、相關性與</span><span lang="EN-US"> Beta</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">：你看到的槓桿，不是你以為的槓桿</span><span lang="EN-US"><o:p></o:p></span></h1>
+
+<p class="MsoNormal" style="margin-bottom:9.0pt;line-height:150%"><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">要比較不同</span><span lang="EN-US">
+ETP </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri">與大盤的關係，需要兩個工具：</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoListParagraph" style="margin-top:0cm;margin-right:0cm;margin-bottom:
+5.0pt;margin-left:27.0pt;text-indent:-13.5pt;line-height:150%;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><!--[endif]--><b><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;
+mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">相關性（</span></b><b><span lang="EN-US">Correlation</span></b><b><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">）：</span></b><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri">衡量兩個資產報酬率的變動方向是否一致。它告訴我們某個金融商品跟大盤走勢是否同步（看正負），以及同步程度高不高（看絕對值）。最直接的方法，是把資產報酬率之間做線性回歸，得到「</span><span lang="EN-US">R </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">值」。</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoListParagraph" style="margin-top:0cm;margin-right:0cm;margin-bottom:
+9.0pt;margin-left:27.0pt;text-indent:-13.5pt;line-height:150%;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><!--[endif]--><b><span lang="EN-US">Beta </span></b><b><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;
+mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">值：</span></b><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">衡量某資產報酬相對於市場指數報酬的「變動幅度」，也就是相較於大盤，這個資產的波動大小與方向。最直接的方法，同樣是把資產報酬率之間做線性回歸，得到「斜率」。</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-bottom:9.0pt;line-height:150%"><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">下表是</span><span lang="EN-US"> VIX </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">指數與幾檔</span><span lang="EN-US">
+ETP</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri">，和大盤（</span><span lang="EN-US">SPXTR</span><span style="font-family:
+&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">）每日報酬的相關性與</span><span lang="EN-US"> Beta </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">值，並以標普</span><span lang="EN-US">
+500 </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri">正二</span><span lang="EN-US"> ETF</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;
+mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">（</span><span lang="EN-US">SSO</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">）作為對照：</span><span lang="EN-US"><o:p></o:p></span></p>
+
+
+
+<p class="MsoNormal" style="margin-bottom:6.0pt"><span lang="EN-US">&nbsp;</span></p><table class="MsoNormalTable" border="1" cellspacing="0" cellpadding="0" width="602" style="width:451.3pt;border-collapse:collapse;border:none;mso-border-alt:solid windowtext .5pt;
+ mso-yfti-tbllook:1184;mso-padding-alt:0cm .5pt 0cm .5pt;mso-border-insideh:
+ .5pt solid windowtext;mso-border-insidev:.5pt solid windowtext">
+ <thead>
+  <tr>
+   <td width="82" valign="top" style="width:61.3pt;border:solid #BFBFBF 1.0pt;
+   mso-border-alt:solid #BFBFBF .5pt;background:#1F4E79;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+   <p class="MsoNormal"><span lang="EN-US">&nbsp;</span></p>
+   </td>
+   <td width="87" valign="top" style="width:65.0pt;border:solid #BFBFBF 1.0pt;
+   border-left:none;mso-border-left-alt:solid #BFBFBF .5pt;mso-border-alt:solid #BFBFBF .5pt;
+   background:#1F4E79;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+   <p class="MsoNormal"><b><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:
+   微軟正黑體;color:white">VIX vs. SPXTR</span></b><span lang="EN-US"><o:p></o:p></span></p>
+   </td>
+   <td width="87" valign="top" style="width:65.0pt;border:solid #BFBFBF 1.0pt;
+   border-left:none;mso-border-left-alt:solid #BFBFBF .5pt;mso-border-alt:solid #BFBFBF .5pt;
+   background:#1F4E79;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+   <p class="MsoNormal"><b><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:
+   微軟正黑體;color:white">SVIX vs. SPXTR</span></b><span lang="EN-US"><o:p></o:p></span></p>
+   </td>
+   <td width="87" valign="top" style="width:65.0pt;border:solid #BFBFBF 1.0pt;
+   border-left:none;mso-border-left-alt:solid #BFBFBF .5pt;mso-border-alt:solid #BFBFBF .5pt;
+   background:#1F4E79;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+   <p class="MsoNormal"><b><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:
+   微軟正黑體;color:white">SVXY vs. SPXTR</span></b><span lang="EN-US"><o:p></o:p></span></p>
+   </td>
+   <td width="87" valign="top" style="width:65.0pt;border:solid #BFBFBF 1.0pt;
+   border-left:none;mso-border-left-alt:solid #BFBFBF .5pt;mso-border-alt:solid #BFBFBF .5pt;
+   background:#1F4E79;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+   <p class="MsoNormal"><b><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:
+   微軟正黑體;color:white">VXX vs. SPXTR</span></b><span lang="EN-US"><o:p></o:p></span></p>
+   </td>
+   <td width="87" valign="top" style="width:65.0pt;border:solid #BFBFBF 1.0pt;
+   border-left:none;mso-border-left-alt:solid #BFBFBF .5pt;mso-border-alt:solid #BFBFBF .5pt;
+   background:#1F4E79;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+   <p class="MsoNormal"><b><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:
+   微軟正黑體;color:white">UVXY vs. SPXTR</span></b><span lang="EN-US"><o:p></o:p></span></p>
+   </td>
+   <td width="87" valign="top" style="width:65.0pt;border:solid #BFBFBF 1.0pt;
+   border-left:none;mso-border-left-alt:solid #BFBFBF .5pt;mso-border-alt:solid #BFBFBF .5pt;
+   background:#1F4E79;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+   <p class="MsoNormal"><b><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:
+   微軟正黑體;color:white">SSO vs. SPXTR</span></b><span lang="EN-US"><o:p></o:p></span></p>
+   </td>
+  </tr>
+ </thead>
+ <tbody><tr style="mso-yfti-irow:1;page-break-inside:avoid">
+  <td width="82" valign="top" style="width:61.3pt;border:solid #BFBFBF 1.0pt;
+  border-top:none;mso-border-top-alt:solid #BFBFBF .5pt;mso-border-alt:solid #BFBFBF .5pt;
+  background:white;mso-background-themecolor:background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span style="font-size:9.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+  mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:black">相關性</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="87" valign="top" style="width:65.0pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:
+  微軟正黑體;color:black">-0.72</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="87" valign="top" style="width:65.0pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:
+  微軟正黑體;color:black">0.75</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="87" valign="top" style="width:65.0pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:
+  微軟正黑體;color:black">0.73</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="87" valign="top" style="width:65.0pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:
+  微軟正黑體;color:black">-0.72</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="87" valign="top" style="width:65.0pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:
+  微軟正黑體;color:black">-0.73</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="87" valign="top" style="width:65.0pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:
+  微軟正黑體;color:black">0.99</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr style="mso-yfti-irow:2;mso-yfti-lastrow:yes;page-break-inside:avoid">
+  <td width="82" valign="top" style="width:61.3pt;border:solid #BFBFBF 1.0pt;
+  border-top:none;mso-border-top-alt:solid #BFBFBF .5pt;mso-border-alt:solid #BFBFBF .5pt;
+  background:white;mso-background-themecolor:background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:
+  微軟正黑體;color:black">Beta</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="87" valign="top" style="width:65.0pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:
+  微軟正黑體;color:black">-4.75</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="87" valign="top" style="width:65.0pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:
+  微軟正黑體;color:black">2.54</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="87" valign="top" style="width:65.0pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:
+  微軟正黑體;color:black">1.34</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="87" valign="top" style="width:65.0pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:
+  微軟正黑體;color:black">-2.61</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="87" valign="top" style="width:65.0pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:
+  微軟正黑體;color:black">-3.97</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="87" valign="top" style="width:65.0pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:
+  微軟正黑體;color:black">1.94</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+</tbody></table>
+
+<p class="MsoNormal" align="center" style="margin-top:6.0pt;margin-right:0cm;
+margin-bottom:3.0pt;margin-left:0cm;text-align:center;page-break-after:avoid"><span lang="EN-US"><img src="assets/images/2026-10-18-3/img-1.png" alt=""><span style="font-size: 9pt; font-family: 微軟正黑體, sans-serif; color: rgb(89, 89, 89);">圖</span><span lang="EN-US" style="font-size: 9pt; color: rgb(89, 89, 89);"> 1</span><span style="font-size: 9pt; font-family: 微軟正黑體, sans-serif; color: rgb(89, 89, 89);">　</span><span lang="EN-US" style="font-size: 9pt; color: rgb(89, 89, 89);">SVIX</span><span style="font-size: 9pt; font-family: 微軟正黑體, sans-serif; color: rgb(89, 89, 89);">、</span><span lang="EN-US" style="font-size: 9pt; color: rgb(89, 89, 89);">SVXY </span><span style="font-size: 9pt; font-family: 微軟正黑體, sans-serif; color: rgb(89, 89, 89);">與</span><span lang="EN-US" style="font-size: 9pt; color: rgb(89, 89, 89);"> SPXTR </span><span style="font-size: 9pt; font-family: 微軟正黑體, sans-serif; color: rgb(89, 89, 89);">每日報酬散佈圖與迴歸結果</span></span></p>
+
+<p class="MsoNormal" style="margin-bottom:9.0pt;line-height:150%"><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">從這裡可以看出，</span><span lang="EN-US">SVXY
+</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;
+mso-hansi-font-family:Calibri">雖然名為</span><span lang="EN-US"> 0.5 </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri">倍槓桿，</span><span lang="EN-US">Beta </span><span style="font-family:
+&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">值卻高達</span><span lang="EN-US"> 1.3 </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">倍；</span><span lang="EN-US">SVIX </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">雖然名為</span><span lang="EN-US"> 1 </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">倍槓桿，</span><span lang="EN-US">Beta
+</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;
+mso-hansi-font-family:Calibri">值更高達</span><span lang="EN-US"> 2.5 </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri">倍，比</span><span lang="EN-US"> SSO</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;
+mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">（標普</span><span lang="EN-US"> 500 </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">正二）還要高。這也點出</span><span lang="EN-US"> SVIX</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri">「真正的」高槓桿特性：多頭時的複利偏移非常顯著，但單純買入並持有（</span><span lang="EN-US">buy &amp; hold</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">），也要承擔極大的波動耗損，以及空頭時更大的跌幅。因此，較「保守」的</span><span lang="EN-US"> VIX </span><span style="font-family:
+&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">做空交易者，更傾向於使用</span><span lang="EN-US"> SVXY</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">。</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-bottom:9.0pt;line-height:150%"><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">這個落差並不神秘：</span><span lang="EN-US">VXX</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">（做多</span><span lang="EN-US"> 1 </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">倍</span><span lang="EN-US"> VIX </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">短期期貨）的</span><span lang="EN-US">
+Beta </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri">約為</span><span lang="EN-US"> -2.61</span><span style="font-family:
+&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">，反向</span><span lang="EN-US"> 0.5 </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">倍的</span><span lang="EN-US"> SVXY </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">自然落在約</span><span lang="EN-US">
+1.3</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri">，反向</span><span lang="EN-US"> 1 </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;
+mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">倍的</span><span lang="EN-US"> SVIX </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">則落在約</span><span lang="EN-US"> 2.5</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">。換句話說，</span><span lang="EN-US">VIX
+</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;
+mso-hansi-font-family:Calibri">期貨本身對大盤的敏感度就遠高於</span><span lang="EN-US"> 1</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;
+mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">，</span><span lang="EN-US">ETP </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">名稱上的倍數，是相對於</span><span lang="EN-US"> VIX </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri">期貨指數而言，不是相對於大盤。</span></p><p class="MsoNormal" style="margin-bottom:9.0pt;line-height:150%"><span style="font-family: 微軟正黑體, sans-serif;">註：起初</span><span lang="EN-US"> SVXY </span><span style="font-family: 微軟正黑體, sans-serif;">也是</span><span lang="EN-US"> 1 </span><span style="font-family: 微軟正黑體, sans-serif;">倍做空</span><span lang="EN-US"> VIX </span><span style="font-family: 微軟正黑體, sans-serif;">短期期貨，但在經歷</span><span lang="EN-US"> 2018 </span><span style="font-family: 微軟正黑體, sans-serif;">年「波動率末日」後，才被降槓至</span><span lang="EN-US"> 0.5 </span><span style="font-family: 微軟正黑體, sans-serif;">倍。</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri"></span></p><p class="MsoNormal" style="text-align: center; margin-bottom: 9pt; line-height: 150%;"><font face="Space Grotesk, sans-serif"><b style="color: rgb(204, 171, 143);"><span lang="EN-US" style="font-size: 13pt; line-height: 150%;">ETP </span></b><b style="color: rgb(204, 171, 143);"><span style="font-size: 13pt; line-height: 150%;">名稱上的槓桿倍數，是相對於</span></b><b style="color: rgb(204, 171, 143);"><span lang="EN-US" style="font-size: 13pt; line-height: 150%;"> VIX </span></b><b style="color: rgb(204, 171, 143);"><span style="font-size: 13pt; line-height: 150%;">期貨指數，不是相對於大盤。</span></b></font></p>
+
+<h1><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;
+mso-hansi-font-family:Calibri">二、長期做多</span><span lang="EN-US"> VIX</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">：傾家盪產</span><span lang="EN-US"><o:p></o:p></span></h1>
+
+<p class="MsoNormal" style="text-align: center; margin-bottom: 9pt; line-height: 150%;"><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">把</span><span lang="EN-US"> VXX</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">、</span><span lang="EN-US">UVXY </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">的歷史價格畫出來，會看到一條幾乎一路向下的曲線。要特別注意，下圖是對數座標，這代表每一格都是十倍的差距</span><img src="assets/images/2026-10-18-3/img-2.png" alt=""><span style="text-align: center; font-size: 9pt; font-family: 微軟正黑體, sans-serif; color: rgb(89, 89, 89);">圖</span><span lang="EN-US" style="text-align: center; font-size: 9pt; color: rgb(89, 89, 89);"> 2</span><span style="text-align: center; font-size: 9pt; font-family: 微軟正黑體, sans-serif; color: rgb(89, 89, 89);">　</span><span lang="EN-US" style="text-align: center; font-size: 9pt; color: rgb(89, 89, 89);">VXX</span><span style="text-align: center; font-size: 9pt; font-family: 微軟正黑體, sans-serif; color: rgb(89, 89, 89);">、</span><span lang="EN-US" style="text-align: center; font-size: 9pt; color: rgb(89, 89, 89);">UVXY </span><span style="text-align: center; font-size: 9pt; font-family: 微軟正黑體, sans-serif; color: rgb(89, 89, 89);">歷史價格（對數座標）</span></p>
+
+<p class="MsoNormal" style="margin-bottom:9.0pt;line-height:150%"><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">正向</span><span lang="EN-US"> ETP </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">長期下跌，但短期有機會暴漲；反向</span><span lang="EN-US"> ETP </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri">則相反，長期上漲，但短期有機會暴跌。</span><span lang="EN-US">VXX</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">、</span><span lang="EN-US">UVXY</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">、</span><span lang="EN-US">UVIX </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">等一眾做多</span><span lang="EN-US">
+VIX </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri">的</span><span lang="EN-US"> ETP</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;
+mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">，不過短短數年的成立時間，淨值就已經下跌超過</span><span lang="EN-US"> 99%</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">，每隔幾年就要經歷併股。</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-bottom:9.0pt;line-height:150%"><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">長期做多</span><span lang="EN-US"> VIX
+</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;
+mso-hansi-font-family:Calibri">的下場，就是這樣：它或許能在恐慌的當下帶來漂亮的短線報酬，但時間站在對面。</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<h1><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;
+mso-hansi-font-family:Calibri">三、做空</span><span lang="EN-US"> VIX </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">的優勢：</span><span lang="EN-US">VIX </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;
+mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">期貨長期正價差</span><span lang="EN-US"><o:p></o:p></span></h1>
+
+<p class="MsoNormal" style="margin-bottom:9.0pt;line-height:150%"><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">為什麼做多</span><span lang="EN-US">
+VIX </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri">的</span><span lang="EN-US"> ETP </span><span style="font-family:
+&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">會長期下跌？答案藏在期限結構裡。在穩定的市場中，</span><span lang="EN-US">VIX </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">期貨期限結構長期處於正價差（</span><span lang="EN-US">Contango</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri">）：期貨價格大於現貨價格，而且遠月期貨價格大於近月價格。隨著時間向前推進、接近到期日，這些期貨都會向現貨價格收斂，遠月期貨也會向近月期貨的價格靠攏。這正是</span><span lang="EN-US"> VIX </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">期貨指數在長期通常呈現下跌趨勢的原因。在逆價差（</span><span lang="EN-US">Backwardation</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;
+mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">）結構下，情形則恰好相反。</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" align="center" style="margin-top:6.0pt;margin-right:0cm;
+margin-bottom:3.0pt;margin-left:0cm;text-align:center;page-break-after:avoid"><img src="assets/images/2026-10-18-3/img-3.png" alt=""></p>
+
+<p class="MsoNormal" align="center" style="margin-bottom:12.0pt;text-align:center"><span style="font-size:9.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri;color:#595959">圖</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959"> 3</span><span style="font-size:9.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri;color:#595959">　</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959">VIX </span><span style="font-size:9.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri;color:#595959">期貨期限結構：曲線隨時間逐漸左移（資料來源：</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959">vixcentral.com</span><span style="font-size:9.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri;color:#595959">）</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-bottom:9.0pt;line-height:150%"><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">圖中也標示出兩種指數的差異：短期期貨指數只專注於前兩個月（價格波動大），中期期貨指數則專注於第四個月到第七個月（價格波動較小）。到期日當天，首月的期貨價格會幾乎等於現貨價格。</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<div style="mso-element:para-border-div;border:none;border-left:solid #BFBFBF 2.25pt;
+padding:0cm 0cm 0cm 12.0pt;margin-left:18.0pt;margin-right:0cm">
+
+<p class="MsoNormal" style="margin-top:6.0pt;margin-right:0cm;margin-bottom:12.0pt;
+margin-left:0cm;line-height:133%;border:none;mso-border-left-alt:solid #BFBFBF 2.25pt;
+padding:0cm;mso-padding-alt:0cm 0cm 0cm 12.0pt"><font color="#c7a78b"><span style="font-size: 10.5pt; line-height: 133%; font-family: 微軟正黑體, sans-serif;">註：坊間有種說法流傳，</span><span lang="EN-US" style="font-size: 10.5pt; line-height: 133%;">VIX </span><span style="font-size: 10.5pt; line-height: 133%; font-family: 微軟正黑體, sans-serif;">期貨指數長期下跌，是因為每日再平衡機制「賣出價格較低的近月期貨，買入價格較高的遠月期貨」。這其實是一種迷思。實際上，再平衡機制只是進行資產的等值交換，和期貨價格無關，總體資產價值也維持不變。</span></font><span lang="EN-US"><o:p></o:p></span></p>
+
+</div>
+
+<p class="MsoNormal" style="margin-bottom:9.0pt;line-height:150%"><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">正價差的趨勢，反而形成了</span><span lang="EN-US"> VIX </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri">反向型</span><span lang="EN-US"> ETP </span><span style="font-family:
+&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">無形中向上攀升的助力。正是這樣的助力，讓</span><span lang="EN-US"> SVXY </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">和</span><span lang="EN-US"> SVIX </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">在</span><span lang="EN-US"> 2023 </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">年的多頭行情中，分別上漲了</span><span lang="EN-US"> 76.2% </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri">和</span><span lang="EN-US"> 157%</span><span style="font-family:
+&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">。</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" align="center" style="margin-top:6.0pt;margin-right:0cm;
+margin-bottom:3.0pt;margin-left:0cm;text-align:center;page-break-after:avoid"><img src="assets/images/2026-10-18-3/img-4.png" alt=""></p>
+
+<p class="MsoNormal" align="center" style="margin-bottom:12.0pt;text-align:center"><span style="font-size:9.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri;color:#595959">圖</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959"> 4</span><span style="font-size:9.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri;color:#595959">　</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959">SVXY</span><span style="font-size:9.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri;color:#595959">、</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959">SVIX </span><span style="font-size:9.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri;color:#595959">歷史價格（</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959">2022/3/30</span><span style="font-size:9.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri;color:#595959">～</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959">2025/7/12</span><span style="font-size:9.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri;color:#595959">）</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-bottom:9.0pt;line-height:150%"><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">既然如此，什麼才是造成反向型</span><span lang="EN-US"> ETP </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri">暴跌風險的原因呢？</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<h1><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;
+mso-hansi-font-family:Calibri">四、做空</span><span lang="EN-US"> VIX </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">最大的夢魘：波動率末日</span><span lang="EN-US"><o:p></o:p></span></h1>
+
+<p class="MsoNormal" style="margin-bottom:9.0pt;line-height:150%"><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">「波動率末日」（</span><span lang="EN-US">Volmageddon</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">）是市場俗稱，特別指</span><span lang="EN-US">
+2018 </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri">年</span><span lang="EN-US"> 2 </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;
+mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">月</span><span lang="EN-US"> 5 </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">日發生的事件。這個詞由</span><span lang="EN-US"> Volatility</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;
+mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">（波動率）和</span><span lang="EN-US"> Armageddon</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">（《新約聖經</span><span lang="EN-US">·</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">啟示錄》所預言的末世善惡對決的最終戰場）兩個詞組成。當天</span><span lang="EN-US"> VIX </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri">指數在短短一個交易日內暴漲超過</span><span lang="EN-US"> 100%</span><span style="font-family:
+&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">，導致一連串做空</span><span lang="EN-US"> VIX </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">或追蹤其反向表現的金融商品瞬間崩盤。</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-bottom:9.0pt;line-height:150%"><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">最具代表性的是</span><span lang="EN-US">
+XIV</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri">（反向</span><span lang="EN-US"> 1 </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;
+mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">倍槓桿，算是</span><span lang="EN-US"> SVIX </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">的前身）。</span><span lang="EN-US">XIV
+</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;
+mso-hansi-font-family:Calibri">當日暴跌超過</span><span lang="EN-US"> 90%</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri">，隔天宣告清算。不過，</span><span lang="EN-US">XIV </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;
+mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">的下市並不能全然歸咎於</span><span lang="EN-US"> VIX </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">指數的單日巨幅飆升。當時大量做空</span><span lang="EN-US"> VIX </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri">的部位同時爆倉（包括槓桿</span><span lang="EN-US"> ETP </span><span style="font-family:
+&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">與機構投資人，反向曝險需緊急買回期貨合約對沖），進而繼續推升</span><span lang="EN-US"> VIX</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">，這樣的連鎖反應放大了衝擊，最終引發如同核爆夷平一切的末日。</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-bottom:9.0pt;line-height:150%"><span lang="EN-US">SVXY</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">（當時為反向</span><span lang="EN-US"> 1
+</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;
+mso-hansi-font-family:Calibri">倍槓桿）當日也下跌超過</span><span lang="EN-US"> 90%</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;
+mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">，淨值幾乎歸零，但並未清算下市。事件之後，</span><span lang="EN-US">ProShares </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">將</span><span lang="EN-US"> SVXY </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">的反向曝險由</span><span lang="EN-US"> -1x
+</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;
+mso-hansi-font-family:Calibri">調降為</span><span lang="EN-US"> -0.5x</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri">。</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-bottom:9.0pt;line-height:150%"><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">後續推出的</span><span lang="EN-US">
+SVIX</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri">，則針對這種極端情境，提出相對於</span><span lang="EN-US"> XIV </span><span style="font-family:
+&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">的關鍵調整與風控機制：</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoListParagraph" style="margin-top:0cm;margin-right:0cm;margin-bottom:
+5.0pt;margin-left:27.0pt;text-indent:-13.5pt;line-height:150%;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><!--[endif]--><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;
+mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">每日再平衡不超過</span><span lang="EN-US"> VIX </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">期貨總量的</span><span lang="EN-US">
+10%</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri">，以降低流動性風險與價格衝擊。</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoListParagraph" style="margin-top:0cm;margin-right:0cm;margin-bottom:
+5.0pt;margin-left:27.0pt;text-indent:-13.5pt;line-height:150%;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><!--[endif]--><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;
+mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">在市場極端波動下，可啟動「延長再平衡期」，並通報交易所與</span><span lang="EN-US"> SEC</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">。</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoListParagraph" style="margin-top:0cm;margin-right:0cm;margin-bottom:
+5.0pt;margin-left:27.0pt;text-indent:-13.5pt;line-height:150%;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><!--[endif]--><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;
+mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">明確保留美債、貨幣市場工具，作為保證金與資產緩衝。</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoListParagraph" style="margin-top:0cm;margin-right:0cm;margin-bottom:
+5.0pt;margin-left:27.0pt;text-indent:-13.5pt;line-height:150%;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><!--[endif]--><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;
+mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">允許使用選擇權、</span><span lang="EN-US">SWAP </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">等其他衍生工具替代期貨。</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoListParagraph" style="margin-top:0cm;margin-right:0cm;margin-bottom:
+5.0pt;margin-left:27.0pt;text-indent:-13.5pt;line-height:150%;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><!--[endif]--><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;
+mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">架構為</span><span lang="EN-US"> ETF</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">，有資產保障與每日揭露的透明度。</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoListParagraph" style="margin-top:0cm;margin-right:0cm;margin-bottom:
+9.0pt;margin-left:27.0pt;text-indent:-13.5pt;line-height:150%;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><!--[endif]--><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;
+mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">多處揭露與教育文件強調：不可長期持有，需每日監控。</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<h1><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;
+mso-hansi-font-family:Calibri">五、解決方法：輪換策略</span><span lang="EN-US"><o:p></o:p></span></h1>
+
+<p class="MsoNormal" style="margin-bottom:9.0pt;line-height:150%"><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">單純長期持有</span><span lang="EN-US">
+VIX </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri">反向型</span><span lang="EN-US"> ETP</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;
+mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">，有很高的機率遭遇波動率末日。要解決這個問題，就必須有適當的進出場策略。如此一來，做空</span><span lang="EN-US"> VIX </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">就變成一種講究「擇時」的主動投資方法。</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin-bottom:9.0pt;line-height:150%"><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">這類策略主要考量市場當下的波動程度（樂觀或恐慌的程度），將資金配置於表現最佳的資產上，例如：</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoListParagraph" style="margin-top:0cm;margin-right:0cm;margin-bottom:
+5.0pt;margin-left:27.0pt;text-indent:-13.5pt;line-height:150%;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><!--[endif]--><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;
+mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">低波動率時期：配置</span><span lang="EN-US"> VIX </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">反向型</span><span lang="EN-US"> ETP</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">。</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoListParagraph" style="margin-top:0cm;margin-right:0cm;margin-bottom:
+5.0pt;margin-left:27.0pt;text-indent:-13.5pt;line-height:150%;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><!--[endif]--><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;
+mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">波動率上升期：配置與大盤相關性極低的黃金。</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoListParagraph" style="margin-top:0cm;margin-right:0cm;margin-bottom:
+9.0pt;margin-left:27.0pt;text-indent:-13.5pt;line-height:150%;mso-list:l0 level1 lfo1"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><!--[endif]--><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;
+mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri">波動率爆表時：配置</span><span lang="EN-US"> VIX </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">正向型</span><span lang="EN-US"> ETP</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">（通常採用價格波動較小的中期期貨</span><span lang="EN-US"> ETP</span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri">）。</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" align="center" style="margin-top:6.0pt;margin-right:0cm;
+margin-bottom:3.0pt;margin-left:0cm;text-align:center;page-break-after:avoid"><img src="assets/images/2026-10-18-3/img-5.png" alt=""></p>
+
+<p class="MsoNormal" align="center" style="margin-bottom:12.0pt;text-align:center"><span style="font-size:9.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri;color:#595959">圖</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959"> 5</span><span style="font-size:9.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri;color:#595959">　</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959">VTS
+Tactical Volatility Strategy </span><span style="font-size:9.0pt;font-family:
+&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;
+color:#595959">示意（參考來源：</span><span lang="EN-US" style="font-size:9.0pt;
+mso-fareast-font-family:微軟正黑體;color:#595959">volatilitytradingstrategies.com</span><span style="font-size:9.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri;color:#595959">）</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<h1><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;
+mso-hansi-font-family:Calibri">下一章預告</span><span lang="EN-US"><o:p></o:p></span></h1>
+
+<span style="font-size:11.5pt;font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri;mso-bidi-font-family:&quot;Times New Roman&quot;;
+mso-ansi-language:EN-US;mso-fareast-language:ZH-TW;mso-bidi-language:AR-SA">下一章，我將介紹從過去十幾年的回測大數據中，歸納出的判斷</span><span lang="EN-US" style="font-size:11.5pt;font-family:&quot;Calibri&quot;,sans-serif;mso-fareast-font-family:
+微軟正黑體;mso-bidi-font-family:&quot;Times New Roman&quot;;mso-ansi-language:EN-US;
+mso-fareast-language:ZH-TW;mso-bidi-language:AR-SA"> VIX </span><span style="font-size:11.5pt;font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri;mso-bidi-font-family:&quot;Times New Roman&quot;;
+mso-ansi-language:EN-US;mso-fareast-language:ZH-TW;mso-bidi-language:AR-SA">多空分水嶺的重要指標，以及依據這個指標所發展出的資產輪換策略。</span><span style="color: rgb(199, 167, 139);"><font face="Space Grotesk, sans-serif" style="font-size: 13px;"></font></span></div>
+  </article>
+
+  <footer>
+    <p class="disclaimer">本網站與所連結頁面之內容僅為個人資料整理與策略追蹤工具,不構成任何投資建議。</p>
+    <div class="links"><span id="footYear"></span></div>
+  </footer>
+</div>
+
+<script>
+  document.getElementById('footYear').textContent = new Date().getFullYear() + ' · Personal Project';
+</script>
+
+</body>
+</html>
