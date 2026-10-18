@@ -178,7 +178,7 @@
 
   .editor-body{
     flex:1;
-    height:0;
+    align-self:stretch;
     min-height: 200px;
     overflow-y: scroll;
     outline:none;
@@ -503,6 +503,29 @@
   }
   refreshEmptyState();
   editor.addEventListener('input', refreshEmptyState);
+
+  // ---------- 編輯區高度對齊「發布到投資筆記」按鈕下緣 ----------
+  const editorWrapperEl = document.querySelector('.editor-wrapper');
+  const btnPublishForHeight = document.getElementById('btnPublish');
+  function syncEditorHeight(){
+    if (!editorWrapperEl || !btnPublishForHeight) return;
+    if (window.innerWidth <= 900){
+      editorWrapperEl.style.height = '';
+      return;
+    }
+    editorWrapperEl.style.height = '';
+    const wrapTop = editorWrapperEl.getBoundingClientRect().top;
+    const btnBottom = btnPublishForHeight.getBoundingClientRect().bottom;
+    const targetHeight = btnBottom - wrapTop;
+    if (targetHeight > 0){
+      editorWrapperEl.style.height = targetHeight + 'px';
+    }
+    if (typeof updateProgressBar === 'function') updateProgressBar();
+  }
+  window.addEventListener('load', syncEditorHeight);
+  window.addEventListener('resize', syncEditorHeight);
+  setTimeout(syncEditorHeight, 0);
+  setTimeout(syncEditorHeight, 300);
 
   // ---------- 滾動進度條 ----------
   const progressBar = document.getElementById('progressBar');
