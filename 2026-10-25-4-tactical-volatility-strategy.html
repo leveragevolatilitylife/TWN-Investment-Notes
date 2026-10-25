@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>波動率投資策略(4) - 波動率戰術資產配置策略(Tactical Volatility Strategy)｜投資筆記｜Yung's Journey to FIRE</title>
+<meta name="description" content="前三章我們依序認識了 VIX 指數、VIX 期貨與相關 ETP，也看到做空 VIX 既有長期正價差的優勢，卻也背著波動率末日的風險。這一章是整個系列的重頭戲：把上一章預告的輪換策略，拿到十幾年的歷史數據上回測，看看它究竟表現如何。 本章分三個部分：先介紹推升VIX 反向型 ETP 的真正作用力，也就是 VX30的滾動收益率；接著說明衡量策略好壞的指標；最後是策略的規則、回測方法與歷史回測的綜合比較。">
+<link rel="icon" href="avatar.jpg">
+<meta name="theme-color" content="#0a0e14">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+
+<div class="wrap narrow">
+  <header>
+    <div class="header-row">
+      <a class="brand" href="https://leveragevolatilitylife.github.io/" style="align-items:center;">
+        <img class="avatar" src="avatar.jpg" alt="LeverageVolatilityLife">
+        <b>Yung's Journey to FIRE｜Investing with Leverage &amp; Volatility</b>
+      </a>
+      <div class="header-right">
+        <div class="social">
+          <span class="handle">@leverage_volatility_life</span>
+          <a href="https://www.instagram.com/leverage_volatility_life/" target="_blank" rel="noopener">IG</a>
+          <a href="https://www.threads.net/@leverage_volatility_life" target="_blank" rel="noopener">Threads</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="page-intro" style="padding-top:48px;">
+    <a class="breadcrumb" href="index.html">← 回到投資筆記</a>
+    <div class="eyebrow-line">NOTES</div>
+    <h1>波動率投資策略(4) - 波動率戰術資產配置策略(Tactical Volatility Strategy)</h1>
+  </section>
+
+  <div class="article-meta">
+    <span>2026-10-25</span>
+    <span>·</span>
+    <span>波動率投資策略、策略回測</span>
+  </div>
+
+  <article class="prose">
+    <p class="lead">前三章我們依序認識了 VIX 指數、VIX 期貨與相關 ETP，也看到做空 VIX 既有長期正價差的優勢，卻也背著波動率末日的風險。這一章是整個系列的重頭戲：把上一章預告的輪換策略，拿到十幾年的歷史數據上回測，看看它究竟表現如何。 本章分三個部分：先介紹推升VIX 反向型 ETP 的真正作用力，也就是 VX30的滾動收益率；接著說明衡量策略好壞的指標；最後是策略的規則、回測方法與歷史回測的綜合比較。</p>
+    <p class="MsoNormal" style="text-align: center; margin-bottom: 3pt;"><font color="#c7a78b" style="font-size: 15.5px;"><span style="font-family: 微軟正黑體, sans-serif;"><b style="">免責聲明</b></span><span lang="EN-US" style=""><o:p></o:p></span></font></p>
+
+<div style="font-family: 微軟正黑體, sans-serif; text-align: justify;"><span style="color: rgb(199, 167, 139);"><font style="font-size: 15.5px;">本文僅為個人研究與經驗分享，非任何形式之投資建議或承諾。所有金融商品皆具一定程度風險，可能導致重大虧損，讀者須自行評估並負擔個人決策全部後果。內容所涉標的僅供參考，過往績效不代表未來表現。本人不對任何依據本文進行之投資行為負責，請務必審慎判斷。</font></span></div><div style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; text-align: justify;"><span style="color: rgb(199, 167, 139); font-size: 9.5pt;"><br></span></div><div style="text-align: justify;"><h1><font style="font-size: 22px;"><span style="font-family: 微軟正黑體, sans-serif;">一、</span><span lang="EN-US" style="">VIX </span><span style="font-family: 微軟正黑體, sans-serif;">反向型</span><span lang="EN-US" style=""> ETP的推升動力&nbsp;</span><span style="font-family: 微軟正黑體, sans-serif;">：</span><span lang="EN-US" style="">VX30:VIX</span><span style="font-family: 微軟正黑體, sans-serif;">滾動收益率</span></font><span lang="EN-US"><o:p></o:p></span></h1><div><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+Calibri;mso-hansi-font-family:Calibri"><br></span></div>
+
+<p class="MsoNormal" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 9pt; line-height: 150%;">第二章提到，<span lang="EN-US">VIX
+</span>短期期貨指數持有前兩個月的期貨，並依到期日遠近以線性權重分配。這裡我們把它濃縮成一個數字：定義一個組成<span lang="EN-US"> VIX </span>短期期貨指數的線性加權期貨價格<span lang="EN-US"> VX30</span>。</p><!--[if gte msEquation 12]><m:oMathPara><m:oMathParaPr><m:jc
+   m:val="centerGroup"></m:jc></m:oMathParaPr><m:oMath><m:r><span
+   style='font-size:20.0pt;font-family:"Cambria Math";mso-ascii-font-family:
+   "Cambria Math";mso-fareast-font-family:"Noto Sans T Chinese Bold";
+   mso-bidi-font-family:"Noto Sans T Chinese Bold";color:black;mso-color-index:
+   1;mso-font-kerning:12.0pt;language:en-US;font-weight:bold;font-style:normal;
+   mso-style-textfill-type:solid;mso-style-textfill-fill-themecolor:text1;
+   mso-style-textfill-fill-color:black;mso-style-textfill-fill-alpha:100.0%'>&#119829;&#119831;&#120785;&#120782;</span></m:r><m:r><span
+   style='font-size:20.0pt;font-family:"Cambria Math";mso-ascii-font-family:
+   "Cambria Math";mso-fareast-font-family:"Noto Sans T Chinese Bold";
+   mso-bidi-font-family:"Noto Sans T Chinese Bold";color:black;mso-color-index:
+   1;mso-font-kerning:12.0pt;language:en-US;font-weight:bold;font-style:normal;
+   mso-style-textfill-type:solid;mso-style-textfill-fill-themecolor:text1;
+   mso-style-textfill-fill-color:black;mso-style-textfill-fill-alpha:100.0%'>=</span></m:r><m:r><span
+   style='font-size:20.0pt;font-family:"Cambria Math";mso-ascii-font-family:
+   "Cambria Math";mso-fareast-font-family:"Noto Sans T Chinese Bold";
+   mso-bidi-font-family:"Noto Sans T Chinese Bold";color:black;mso-color-index:
+   1;mso-font-kerning:12.0pt;language:en-US;font-weight:bold;font-style:normal;
+   mso-style-textfill-type:solid;mso-style-textfill-fill-themecolor:text1;
+   mso-style-textfill-fill-color:black;mso-style-textfill-fill-alpha:100.0%'>&#119820;</span></m:r><m:r><span
+   style='font-size:20.0pt;font-family:"Cambria Math";mso-ascii-font-family:
+   "Cambria Math";mso-fareast-font-family:"Noto Sans T Chinese Bold";
+   mso-bidi-font-family:"Noto Sans T Chinese Bold";color:black;mso-color-index:
+   1;mso-font-kerning:12.0pt;language:en-US;font-weight:bold;font-style:normal;
+   mso-style-textfill-type:solid;mso-style-textfill-fill-themecolor:text1;
+   mso-style-textfill-fill-color:black;mso-style-textfill-fill-alpha:100.0%'>&#120783;</span></m:r><m:r><span
+   style='font-size:20.0pt;font-family:"Noto Sans T Chinese Bold";mso-ascii-font-family:
+   "Cambria Math";mso-fareast-font-family:"Noto Sans T Chinese Bold";
+   mso-bidi-font-family:"Noto Sans T Chinese Bold";color:black;mso-color-index:
+   1;mso-font-kerning:12.0pt;language:en-US;font-weight:bold;font-style:normal;
+   mso-style-textfill-type:solid;mso-style-textfill-fill-themecolor:text1;
+   mso-style-textfill-fill-color:black;mso-style-textfill-fill-alpha:100.0%'>×</span></m:r><m:r><span
+   style='font-size:20.0pt;font-family:"Cambria Math";mso-ascii-font-family:
+   "Cambria Math";mso-fareast-font-family:"Noto Sans T Chinese Bold";
+   mso-bidi-font-family:"Noto Sans T Chinese Bold";color:black;mso-color-index:
+   1;mso-font-kerning:12.0pt;language:en-US;font-weight:bold;font-style:normal;
+   mso-style-textfill-type:solid;mso-style-textfill-fill-themecolor:text1;
+   mso-style-textfill-fill-color:black;mso-style-textfill-fill-alpha:100.0%'>&#119811;&#119812;&#120783;</span></m:r><m:r><span
+   style='font-size:20.0pt;font-family:"Noto Sans T Chinese Bold";mso-ascii-font-family:
+   "Cambria Math";mso-fareast-font-family:"Noto Sans T Chinese Bold";
+   mso-bidi-font-family:"Noto Sans T Chinese Bold";color:black;mso-color-index:
+   1;mso-font-kerning:12.0pt;language:en-US;font-weight:bold;font-style:normal;
+   mso-style-textfill-type:solid;mso-style-textfill-fill-themecolor:text1;
+   mso-style-textfill-fill-color:black;mso-style-textfill-fill-alpha:100.0%'>×</span></m:r><m:f><m:fPr><span
+    style='font-size:20.0pt;font-family:"Cambria Math";mso-ascii-font-family:
+    "Cambria Math";mso-fareast-font-family:"Noto Sans T Chinese Bold";
+    mso-bidi-font-family:"Noto Sans T Chinese Bold";color:black;mso-color-index:
+    1;mso-font-kerning:12.0pt;language:en-US;font-weight:bold;font-style:italic;
+    mso-style-textfill-type:solid;mso-style-textfill-fill-themecolor:text1;
+    mso-style-textfill-fill-color:black;mso-style-textfill-fill-alpha:100.0%'><m:ctrlPr></m:ctrlPr></span></m:fPr><m:num><m:r><span
+     style='font-size:20.0pt;font-family:"Cambria Math";mso-ascii-font-family:
+     "Cambria Math";mso-fareast-font-family:"Noto Sans T Chinese Bold";
+     mso-bidi-font-family:"Noto Sans T Chinese Bold";color:black;mso-color-index:
+     1;mso-font-kerning:12.0pt;language:en-US;font-weight:bold;font-style:normal;
+     mso-style-textfill-type:solid;mso-style-textfill-fill-themecolor:text1;
+     mso-style-textfill-fill-color:black;mso-style-textfill-fill-alpha:100.0%'>&#120783;&#120782;&#120782;</span></m:r><m:r><span
+     style='font-size:20.0pt;font-family:"Cambria Math";mso-ascii-font-family:
+     "Cambria Math";mso-fareast-font-family:"Noto Sans T Chinese Bold";
+     mso-bidi-font-family:"Noto Sans T Chinese Bold";color:black;mso-color-index:
+     1;mso-font-kerning:12.0pt;language:en-US;font-weight:bold;font-style:normal;
+     mso-style-textfill-type:solid;mso-style-textfill-fill-themecolor:text1;
+     mso-style-textfill-fill-color:black;mso-style-textfill-fill-alpha:100.0%'>%</span></m:r></m:num><m:den><m:r><span
+     style='font-size:20.0pt;font-family:"Cambria Math";mso-ascii-font-family:
+     "Cambria Math";mso-fareast-font-family:"Noto Sans T Chinese Bold";
+     mso-bidi-font-family:"Noto Sans T Chinese Bold";color:black;mso-color-index:
+     1;mso-font-kerning:12.0pt;language:en-US;font-weight:bold;font-style:normal;
+     mso-style-textfill-type:solid;mso-style-textfill-fill-themecolor:text1;
+     mso-style-textfill-fill-color:black;mso-style-textfill-fill-alpha:100.0%'>&#119827;&#119812;&#120783;</span></m:r></m:den></m:f><m:r><span
+   style='font-size:20.0pt;font-family:"Cambria Math";mso-ascii-font-family:
+   "Cambria Math";mso-fareast-font-family:"Noto Sans T Chinese Bold";
+   mso-bidi-font-family:"Noto Sans T Chinese Bold";color:black;mso-color-index:
+   1;mso-font-kerning:12.0pt;language:en-US;font-weight:bold;font-style:normal;
+   mso-style-textfill-type:solid;mso-style-textfill-fill-themecolor:text1;
+   mso-style-textfill-fill-color:black;mso-style-textfill-fill-alpha:100.0%'>+</span></m:r><m:r><span
+   style='font-size:20.0pt;font-family:"Cambria Math";mso-ascii-font-family:
+   "Cambria Math";mso-fareast-font-family:"Noto Sans T Chinese Bold";
+   mso-bidi-font-family:"Noto Sans T Chinese Bold";color:black;mso-color-index:
+   1;mso-font-kerning:12.0pt;language:en-US;font-weight:bold;font-style:normal;
+   mso-style-textfill-type:solid;mso-style-textfill-fill-themecolor:text1;
+   mso-style-textfill-fill-color:black;mso-style-textfill-fill-alpha:100.0%'>&#119820;</span></m:r><m:r><span
+   style='font-size:20.0pt;font-family:"Cambria Math";mso-ascii-font-family:
+   "Cambria Math";mso-fareast-font-family:"Noto Sans T Chinese Bold";
+   mso-bidi-font-family:"Noto Sans T Chinese Bold";color:black;mso-color-index:
+   1;mso-font-kerning:12.0pt;language:en-US;font-weight:bold;font-style:normal;
+   mso-style-textfill-type:solid;mso-style-textfill-fill-themecolor:text1;
+   mso-style-textfill-fill-color:black;mso-style-textfill-fill-alpha:100.0%'>&#120784;</span></m:r><m:r><span
+   style='font-size:20.0pt;font-family:"Noto Sans T Chinese Bold";mso-ascii-font-family:
+   "Cambria Math";mso-fareast-font-family:"Noto Sans T Chinese Bold";
+   mso-bidi-font-family:"Noto Sans T Chinese Bold";color:black;mso-color-index:
+   1;mso-font-kerning:12.0pt;language:en-US;font-weight:bold;font-style:normal;
+   mso-style-textfill-type:solid;mso-style-textfill-fill-themecolor:text1;
+   mso-style-textfill-fill-color:black;mso-style-textfill-fill-alpha:100.0%'>×</span></m:r><m:d><m:dPr><span
+    style='font-size:20.0pt;font-family:"Cambria Math";mso-ascii-font-family:
+    "Cambria Math";mso-fareast-font-family:"Noto Sans T Chinese Bold";
+    mso-bidi-font-family:"Noto Sans T Chinese Bold";color:black;mso-color-index:
+    1;mso-font-kerning:12.0pt;language:en-US;font-weight:bold;font-style:italic;
+    mso-style-textfill-type:solid;mso-style-textfill-fill-themecolor:text1;
+    mso-style-textfill-fill-color:black;mso-style-textfill-fill-alpha:100.0%'><m:ctrlPr></m:ctrlPr></span></m:dPr><m:e><m:r><span
+     style='font-size:20.0pt;font-family:"Cambria Math";mso-ascii-font-family:
+     "Cambria Math";mso-fareast-font-family:"Noto Sans T Chinese Bold";
+     mso-bidi-font-family:"Noto Sans T Chinese Bold";color:black;mso-color-index:
+     1;mso-font-kerning:12.0pt;language:en-US;font-weight:bold;font-style:normal;
+     mso-style-textfill-type:solid;mso-style-textfill-fill-themecolor:text1;
+     mso-style-textfill-fill-color:black;mso-style-textfill-fill-alpha:100.0%'>&#119827;&#119812;&#120783;</span></m:r><m:r><span
+     style='font-size:20.0pt;font-family:"Cambria Math";mso-ascii-font-family:
+     "Cambria Math";mso-fareast-font-family:"Noto Sans T Chinese Bold";
+     mso-bidi-font-family:"Noto Sans T Chinese Bold";color:black;mso-color-index:
+     1;mso-font-kerning:12.0pt;language:en-US;font-weight:bold;font-style:normal;
+     mso-style-textfill-type:solid;mso-style-textfill-fill-themecolor:text1;
+     mso-style-textfill-fill-color:black;mso-style-textfill-fill-alpha:100.0%'>−</span></m:r><m:r><span
+     style='font-size:20.0pt;font-family:"Cambria Math";mso-ascii-font-family:
+     "Cambria Math";mso-fareast-font-family:"Noto Sans T Chinese Bold";
+     mso-bidi-font-family:"Noto Sans T Chinese Bold";color:black;mso-color-index:
+     1;mso-font-kerning:12.0pt;language:en-US;font-weight:bold;font-style:normal;
+     mso-style-textfill-type:solid;mso-style-textfill-fill-themecolor:text1;
+     mso-style-textfill-fill-color:black;mso-style-textfill-fill-alpha:100.0%'>&#119811;&#119812;&#120783;</span></m:r></m:e></m:d><m:r><span
+   style='font-size:20.0pt;font-family:"Noto Sans T Chinese Bold";mso-ascii-font-family:
+   "Cambria Math";mso-fareast-font-family:"Noto Sans T Chinese Bold";
+   mso-bidi-font-family:"Noto Sans T Chinese Bold";color:black;mso-color-index:
+   1;mso-font-kerning:12.0pt;language:en-US;font-weight:bold;font-style:normal;
+   mso-style-textfill-type:solid;mso-style-textfill-fill-themecolor:text1;
+   mso-style-textfill-fill-color:black;mso-style-textfill-fill-alpha:100.0%'>×</span></m:r><m:f><m:fPr><span
+    style='font-size:20.0pt;font-family:"Cambria Math";mso-ascii-font-family:
+    "Cambria Math";mso-fareast-font-family:"Noto Sans T Chinese Bold";
+    mso-bidi-font-family:"Noto Sans T Chinese Bold";color:black;mso-color-index:
+    1;mso-font-kerning:12.0pt;language:en-US;font-weight:bold;font-style:italic;
+    mso-style-textfill-type:solid;mso-style-textfill-fill-themecolor:text1;
+    mso-style-textfill-fill-color:black;mso-style-textfill-fill-alpha:100.0%'><m:ctrlPr></m:ctrlPr></span></m:fPr><m:num><m:r><span
+     style='font-size:20.0pt;font-family:"Cambria Math";mso-ascii-font-family:
+     "Cambria Math";mso-fareast-font-family:"Noto Sans T Chinese Bold";
+     mso-bidi-font-family:"Noto Sans T Chinese Bold";color:black;mso-color-index:
+     1;mso-font-kerning:12.0pt;language:en-US;font-weight:bold;font-style:normal;
+     mso-style-textfill-type:solid;mso-style-textfill-fill-themecolor:text1;
+     mso-style-textfill-fill-color:black;mso-style-textfill-fill-alpha:100.0%'>&#120783;&#120782;&#120782;</span></m:r><m:r><span
+     style='font-size:20.0pt;font-family:"Cambria Math";mso-ascii-font-family:
+     "Cambria Math";mso-fareast-font-family:"Noto Sans T Chinese Bold";
+     mso-bidi-font-family:"Noto Sans T Chinese Bold";color:black;mso-color-index:
+     1;mso-font-kerning:12.0pt;language:en-US;font-weight:bold;font-style:normal;
+     mso-style-textfill-type:solid;mso-style-textfill-fill-themecolor:text1;
+     mso-style-textfill-fill-color:black;mso-style-textfill-fill-alpha:100.0%'>%</span></m:r></m:num><m:den><m:r><span
+     style='font-size:20.0pt;font-family:"Cambria Math";mso-ascii-font-family:
+     "Cambria Math";mso-fareast-font-family:"Noto Sans T Chinese Bold";
+     mso-bidi-font-family:"Noto Sans T Chinese Bold";color:black;mso-color-index:
+     1;mso-font-kerning:12.0pt;language:en-US;font-weight:bold;font-style:normal;
+     mso-style-textfill-type:solid;mso-style-textfill-fill-themecolor:text1;
+     mso-style-textfill-fill-color:black;mso-style-textfill-fill-alpha:100.0%'>&#119827;&#119812;&#120783;</span></m:r></m:den></m:f></m:oMath></m:oMathPara><![endif]--><!--[if !msEquation]--><!--[endif]--><p class="MsoNormal" style="text-align: center; font-family: 微軟正黑體, sans-serif; margin-bottom: 9pt; line-height: 150%;"><font style="font-size: 18px;" color="#c7a78b"><span style="font-family: &quot;Cambria Math&quot;; font-weight: bold;">VX30=</span><span style="font-family: &quot;Cambria Math&quot;; font-weight: bold;">M</span><span style="font-family: &quot;Cambria Math&quot;; font-weight: bold;">1 × DE1 ×&nbsp;</span><span style="font-family: &quot;Cambria Math&quot;; font-weight: bold;">(</span><span style="font-family: &quot;Cambria Math&quot;; font-weight: bold;">100%) / TE1 +&nbsp;</span><span style="font-family: &quot;Cambria Math&quot;; font-weight: bold;">M</span><span style="font-family: &quot;Cambria Math&quot;; font-weight: bold;">2 ×&nbsp;</span><span style="font-family: &quot;Cambria Math&quot;; font-weight: bold;">(</span><span style="font-family: &quot;Cambria Math&quot;; font-weight: bold;">TE1 - DE1) ×&nbsp;</span><span style="font-family: &quot;Cambria Math&quot;; font-weight: bold;">(</span><span style="font-family: &quot;Cambria Math&quot;; font-weight: bold;">100% / TE1)</span></font></p><p class="MsoNormal" style="margin-bottom: 9pt; line-height: 150%;"><font face="Cambria Math">其中:&nbsp;</font></p><p class="MsoNormal" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 9pt; line-height: 150%;"><span lang="EN-US" style="font-size: 9.5pt; text-indent: -13.5pt;">&nbsp; &nbsp; &nbsp;•<span style="font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp; &nbsp; &nbsp;&nbsp;</span></span><b style="font-size: 9.5pt; text-indent: -13.5pt;"><span lang="EN-US">M1</span></b><b style="font-size: 9.5pt; text-indent: -13.5pt;">：</b><span style="font-size: 9.5pt; text-indent: -13.5pt;">首月期貨價格。</span></p>
+
+<p class="MsoListParagraph" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin: 0cm 0cm 5pt 27pt; text-indent: -13.5pt; line-height: 150%;"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><!--[endif]--><b><span lang="EN-US">M2</span></b><b>：</b>次月期貨價格。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoListParagraph" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin: 0cm 0cm 5pt 27pt; text-indent: -13.5pt; line-height: 150%;"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><!--[endif]--><b><span lang="EN-US">DE1</span></b><b>：</b>首月期貨到期剩餘日。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoListParagraph" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin: 0cm 0cm 9pt 27pt; text-indent: -13.5pt; line-height: 150%;"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><!--[endif]--><b><span lang="EN-US">TE1</span></b><b>：</b>首月期貨到期週期總交易日；<span lang="EN-US">100% ÷ TE1 </span>代表每天滾動的部位比例。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 9pt; line-height: 150%;">我們以<span lang="EN-US">
+2025/7/11 </span>的<span lang="EN-US"> VIX </span>期貨期限結構為例，代入上面的公式：<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" align="center" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin: 6pt 0cm 3pt; text-align: center; break-after: avoid;"><img src="assets/images/2026-10-25-4-tactical-volatility-strategy/img-1.png" alt=""></p>
+
+<p class="MsoNormal" align="center" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 12pt; text-align: center;"><span style="font-size: 9pt; color: rgb(89, 89, 89);">圖</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959"> 1</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">　</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959">2025/7/11 </span><span style="font-size: 9pt; color: rgb(89, 89, 89);">的</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959"> VIX </span><span style="font-size: 9pt; color: rgb(89, 89, 89);">期貨期限結構（資料來源：</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959">vixcentral.com</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">）</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<div style="text-align: justify;"><table class="MsoNormalTable" border="1" cellspacing="0" cellpadding="0" width="602" style="width:451.3pt;border-collapse:collapse;border:none;mso-border-alt:solid windowtext .5pt;
+ mso-yfti-tbllook:1184;mso-padding-alt:0cm .5pt 0cm .5pt;mso-border-insideh:
+ .5pt solid windowtext;mso-border-insidev:.5pt solid windowtext">
+ <thead>
+  <tr>
+   <td width="173" valign="top" style="width:130.0pt;border:solid #BFBFBF 1.0pt;
+   mso-border-alt:solid #BFBFBF .5pt;background:#1F4E79;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+   <p class="MsoNormal"><b><span style="font-size:10.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+   mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:white">項目</span></b><span lang="EN-US"><o:p></o:p></span></p>
+   </td>
+   <td width="428" valign="top" style="width:321.3pt;border:solid #BFBFBF 1.0pt;
+   border-left:none;mso-border-left-alt:solid #BFBFBF .5pt;mso-border-alt:solid #BFBFBF .5pt;
+   background:#1F4E79;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+   <p class="MsoNormal"><b><span style="font-size:10.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+   mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:white">數值（</span></b><b><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:微軟正黑體;color:white">2025/7/11
+   </span></b><b><span style="font-size:10.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+   mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:white">美股期貨收盤）</span></b><span lang="EN-US"><o:p></o:p></span></p>
+   </td>
+  </tr>
+ </thead>
+ <tbody><tr style="mso-yfti-irow:1;page-break-inside:avoid">
+  <td width="173" valign="top" style="width:130.0pt;border:solid #BFBFBF 1.0pt;
+  border-top:none;mso-border-top-alt:solid #BFBFBF .5pt;mso-border-alt:solid #BFBFBF .5pt;
+  background:white;mso-background-themecolor:background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:
+  微軟正黑體;color:black">M1</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="428" valign="top" style="width:321.3pt;border-top:none;border-left:
+  none;border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:
+  微軟正黑體;color:black">17.123</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr style="mso-yfti-irow:2;page-break-inside:avoid">
+  <td width="173" valign="top" style="width:130.0pt;border:solid #BFBFBF 1.0pt;
+  border-top:none;mso-border-top-alt:solid #BFBFBF .5pt;mso-border-alt:solid #BFBFBF .5pt;
+  background:white;mso-background-themecolor:background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:
+  微軟正黑體;color:black">M2</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="428" valign="top" style="width:321.3pt;border-top:none;border-left:
+  none;border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:
+  微軟正黑體;color:black">19.194</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr style="mso-yfti-irow:3;page-break-inside:avoid">
+  <td width="173" valign="top" style="width:130.0pt;border:solid #BFBFBF 1.0pt;
+  border-top:none;mso-border-top-alt:solid #BFBFBF .5pt;mso-border-alt:solid #BFBFBF .5pt;
+  background:white;mso-background-themecolor:background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:
+  微軟正黑體;color:black">DE1</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="428" valign="top" style="width:321.3pt;border-top:none;border-left:
+  none;border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:
+  微軟正黑體;color:black">4</span><span style="font-size:10.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+  mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:black">（</span><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:微軟正黑體;color:black">M1
+  </span><span style="font-size:10.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+  mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:black">於</span><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:微軟正黑體;color:black">
+  4 </span><span style="font-size:10.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+  mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:black">個交易日後到期）</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr style="mso-yfti-irow:4;page-break-inside:avoid">
+  <td width="173" valign="top" style="width:130.0pt;border:solid #BFBFBF 1.0pt;
+  border-top:none;mso-border-top-alt:solid #BFBFBF .5pt;mso-border-alt:solid #BFBFBF .5pt;
+  background:white;mso-background-themecolor:background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:
+  微軟正黑體;color:black">TE1</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="428" valign="top" style="width:321.3pt;border-top:none;border-left:
+  none;border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:
+  微軟正黑體;color:black">27</span><span style="font-size:10.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+  mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:black">（</span><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:微軟正黑體;color:black">M1
+  </span><span style="font-size:10.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+  mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:black">整個到期週期為</span><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:微軟正黑體;color:black">
+  27 </span><span style="font-size:10.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+  mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:black">個交易日）</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr style="mso-yfti-irow:5;page-break-inside:avoid">
+  <td width="173" valign="top" style="width:130.0pt;border:solid #BFBFBF 1.0pt;
+  border-top:none;mso-border-top-alt:solid #BFBFBF .5pt;mso-border-alt:solid #BFBFBF .5pt;
+  background:white;mso-background-themecolor:background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:
+  微軟正黑體;color:black">100% ÷ TE1</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="428" valign="top" style="width:321.3pt;border-top:none;border-left:
+  none;border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:
+  微軟正黑體;color:black">3.7%</span><span style="font-size:10.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+  mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:black">（每天轉移</span><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:微軟正黑體;color:black">
+  3.7% </span><span style="font-size:10.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+  mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:black">的首月期貨至次月）</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr style="mso-yfti-irow:6;mso-yfti-lastrow:yes;page-break-inside:avoid">
+  <td width="173" valign="top" style="width:130.0pt;border:solid #BFBFBF 1.0pt;
+  border-top:none;mso-border-top-alt:solid #BFBFBF .5pt;mso-border-alt:solid #BFBFBF .5pt;
+  background:white;mso-background-themecolor:background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:
+  微軟正黑體;color:black">VX30</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="428" valign="top" style="width:321.3pt;border-top:none;border-left:
+  none;border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:
+  微軟正黑體;color:black">18.89</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+</tbody></table></div><br>
+
+<p class="MsoNormal" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 9pt; line-height: 150%;"><span lang="EN-US">VX30 </span>可以想成「期限結構曲線上，距今剛好<span lang="EN-US"> 30 </span>天的位置」。把它標在圖上，可以和當天的<span lang="EN-US"> VIX </span>現貨價格對照：<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" align="center" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin: 6pt 0cm 3pt; text-align: center; break-after: avoid;"><img src="assets/images/2026-10-25-4-tactical-volatility-strategy/img-2.png" alt=""></p>
+
+<p class="MsoNormal" align="center" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 12pt; text-align: center;"><span style="font-size: 9pt; color: rgb(89, 89, 89);">圖</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959"> 2</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">　</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959">VX30 </span><span style="font-size: 9pt; color: rgb(89, 89, 89);">與</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959"> VIX </span><span style="font-size: 9pt; color: rgb(89, 89, 89);">現貨價格（紀錄時間為</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959">
+2025/7/11 </span><span style="font-size: 9pt; color: rgb(89, 89, 89);">美股期貨市場收盤；資料來源：</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959">vixcentral.com</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">）</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 9pt; line-height: 150%;">當天<span lang="EN-US"> VX30
+= 18.89</span>，高於<span lang="EN-US"> VIX </span>現貨的<span lang="EN-US"> 16.4</span>。兩者之間的差距，就是下面這個公式所衡量的：</p><p class="MsoNormal" style="text-align: center; margin-bottom: 9pt; line-height: 150%;"><font face="微軟正黑體, sans-serif" style="font-size: 18px;" color="#c6a990"><b style="">VX30:VIX 的滾動收益率（Roll yield）= (VX30 − VIX) ÷ VIX × 100%</b></font></p>
+
+<p class="MsoNormal" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 9pt; line-height: 150%;">以圖中數字代入，這一天的滾動收益率約為<span lang="EN-US"> 15%</span>。這項數據的大小，影響著<span lang="EN-US"> VIX </span>反向型<span lang="EN-US"> ETP </span>的走勢趨勢：正值越大，代表期貨相對現貨的正價差越明顯，也就是第三章說的反向型<span lang="EN-US"> ETP </span>無形中向上攀升的助力。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 9pt; line-height: 150%;">當然，並非觀察<span lang="EN-US">
+VX30:VIX Roll yield </span>就一定能夠預測準確的波動率走勢。但根據回測歷史數據來看，<span lang="EN-US">VX30 Roll yield </span>真的不失為一個觀察波動率趨勢的領先指標。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" align="center" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin: 6pt 0cm 3pt; text-align: center; break-after: avoid;"><img src="assets/images/2026-10-25-4-tactical-volatility-strategy/img-3.png" alt=""></p>
+
+<p class="MsoNormal" align="center" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 12pt; text-align: center;"><span style="font-size: 9pt; color: rgb(89, 89, 89);">圖</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959"> 3</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">　</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959">VX30:VIX
+Roll Yield </span><span style="font-size: 9pt; color: rgb(89, 89, 89);">與</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959">
+VIX</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">（</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959">2025/1/1
+</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">起）</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 9pt; line-height: 150%;">從圖<span lang="EN-US"> 3 </span>可以看到，<span lang="EN-US">2025
+</span>年<span lang="EN-US"> 4 </span>月初關稅風暴期間，<span lang="EN-US">VIX </span>飆升的同時，滾動收益率也轉為深度負值；市場回穩後，則重新回到正值。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 9pt; line-height: 150%;">接著，我們就準備進入這個系列文最終的重頭戲：波動率投資策略的歷史回測。<span lang="EN-US"><o:p></o:p></span></p>
+
+<h1><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;
+mso-hansi-font-family:Calibri"><font style="font-size: 22px;">二、如何衡量策略的好壞</font></span><span lang="EN-US"><o:p></o:p></span></h1><div><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;
+mso-hansi-font-family:Calibri"><br></span></div>
+
+<p class="MsoNormal" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 9pt; line-height: 150%;">在看投資策略的歷史回測之前，我們需要先認識以下幾個指標：年化報酬率、年化標準差、夏普值與最大回撤。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" align="center" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin: 6pt 0cm 3pt; text-align: center; break-after: avoid;"><img src="assets/images/2026-10-25-4-tactical-volatility-strategy/img-4.png" alt=""></p>
+
+<p class="MsoNormal" align="center" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 12pt; text-align: center;"><span style="font-size: 9pt; color: rgb(89, 89, 89);">圖</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959"> 4</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">　策略評估指標的定義與公式</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 9pt; line-height: 150%;">這裡再補充兩點：夏普值公式中的無風險利率<span lang="EN-US"> Rf</span>，在本文回測中設為<span lang="EN-US"> 1.5%</span>；除了最大回撤(<span lang="EN-US">MDD)</span>，後面的比較還會看「單日最大回撤」(<span lang="EN-US">Daily MDD)</span>，也就是單日最大的跌幅，用來看極端單日風險。<span lang="EN-US"><o:p></o:p></span></p>
+
+<h1><font style="font-size: 22px;"><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;
+mso-hansi-font-family:Calibri">三、波動率戰術資產配置策略(</span><span lang="EN-US">VTS<font face="微軟正黑體, sans-serif">)</font></span></font></h1>
+
+<p class="MsoNormal" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 9pt; line-height: 150%;">這裡要介紹的，正是前一章提到的<span lang="EN-US"> VTS</span>：<span lang="EN-US">Brent Osachoff </span>所提出的資產輪換策略。他的策略有專屬的波動率評估指標作為判斷依據(稱為<span lang="EN-US"> Volatility Barometer</span>，這是他的商業機密)，但我們可以從他分享的公開資訊，拿<span lang="EN-US"> VX30:VIX Roll yield </span>作為最基礎的策略指標。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" align="center" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin: 6pt 0cm 3pt; text-align: center; break-after: avoid;"><img src="assets/images/2026-10-25-4-tactical-volatility-strategy/img-5.png" alt=""></p>
+
+<p class="MsoNormal" align="center" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 12pt; text-align: center;"><span style="font-size: 9pt; color: rgb(89, 89, 89);">圖</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959"> 5</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">　</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959">VTS
+Tactical Volatility Strategy</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">（參考來源：</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:
+微軟正黑體;color:#595959">volatilitytradingstrategies.com</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">）</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 9pt; line-height: 150%;">以下是我訂定的詳細交易策略：<span lang="EN-US"><o:p></o:p></span></p>
+
+<table class="MsoNormalTable" border="1" cellspacing="0" cellpadding="0" width="602" style="width:451.3pt;border-collapse:collapse;border:none;mso-border-alt:solid windowtext .5pt;
+ mso-yfti-tbllook:1184;mso-padding-alt:0cm .5pt 0cm .5pt;mso-border-insideh:
+ .5pt solid windowtext;mso-border-insidev:.5pt solid windowtext">
+ <thead>
+  <tr>
+   <td width="287" valign="top" style="width:215.0pt;border:solid #BFBFBF 1.0pt;
+   mso-border-alt:solid #BFBFBF .5pt;background:#1F4E79;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+   <p class="MsoNormal"><b><span style="font-size:10.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+   mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:white">當天美股期貨收盤時的</span></b><b><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:微軟正黑體;color:white">
+   VX30:VIX Roll yield</span></b><span lang="EN-US"><o:p></o:p></span></p>
+   </td>
+   <td width="315" valign="top" style="width:236.3pt;border:solid #BFBFBF 1.0pt;
+   border-left:none;mso-border-left-alt:solid #BFBFBF .5pt;mso-border-alt:solid #BFBFBF .5pt;
+   background:#1F4E79;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+   <p class="MsoNormal"><b><span style="font-size:10.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+   mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:white">隔天持有</span></b><span lang="EN-US"><o:p></o:p></span></p>
+   </td>
+  </tr>
+ </thead>
+ <tbody><tr style="mso-yfti-irow:1;page-break-inside:avoid">
+  <td width="287" valign="top" style="width:215.0pt;border:solid #BFBFBF 1.0pt;
+  border-top:none;mso-border-top-alt:solid #BFBFBF .5pt;mso-border-alt:solid #BFBFBF .5pt;
+  background:white;mso-background-themecolor:background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span style="font-size:10.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+  mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:black">大於歷史</span><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:微軟正黑體;color:black">
+  50 </span><span style="font-size:10.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+  mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:black">百分位數</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="315" valign="top" style="width:236.3pt;border-top:none;border-left:
+  none;border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span style="font-size:10.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+  mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:black">做空</span><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:微軟正黑體;color:black">
+  VIX</span><span style="font-size:10.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+  mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:black">（持有</span><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:微軟正黑體;color:black">
+  SVXY </span><span style="font-size:10.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+  mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:black">或</span><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:微軟正黑體;color:black">
+  SVIX</span><span style="font-size:10.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+  mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:black">）</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr style="mso-yfti-irow:2;page-break-inside:avoid">
+  <td width="287" valign="top" style="width:215.0pt;border:solid #BFBFBF 1.0pt;
+  border-top:none;mso-border-top-alt:solid #BFBFBF .5pt;mso-border-alt:solid #BFBFBF .5pt;
+  background:white;mso-background-themecolor:background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span style="font-size:10.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+  mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:black">介於歷史</span><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:微軟正黑體;color:black">
+  50 </span><span style="font-size:10.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+  mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:black">至</span><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:微軟正黑體;color:black">
+  2 </span><span style="font-size:10.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+  mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:black">百分位數</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="315" valign="top" style="width:236.3pt;border-top:none;border-left:
+  none;border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span style="font-size:10.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+  mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:black">黃金（</span><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:微軟正黑體;color:black">GLD</span><span style="font-size:10.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+  Calibri;mso-hansi-font-family:Calibri;color:black">）</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr style="mso-yfti-irow:3;mso-yfti-lastrow:yes;page-break-inside:avoid">
+  <td width="287" valign="top" style="width:215.0pt;border:solid #BFBFBF 1.0pt;
+  border-top:none;mso-border-top-alt:solid #BFBFBF .5pt;mso-border-alt:solid #BFBFBF .5pt;
+  background:white;mso-background-themecolor:background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span style="font-size:10.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+  mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:black">小於歷史</span><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:微軟正黑體;color:black">
+  2 </span><span style="font-size:10.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+  mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:black">百分位數</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="315" valign="top" style="width:236.3pt;border-top:none;border-left:
+  none;border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:4.0pt 5.5pt 4.0pt 5.5pt">
+  <p class="MsoNormal"><span style="font-size:10.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+  mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:black">做多</span><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:微軟正黑體;color:black">
+  VIX</span><span style="font-size:10.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+  mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:black">（持有</span><span lang="EN-US" style="font-size:10.0pt;mso-fareast-font-family:微軟正黑體;color:black">
+  VXZ</span><span style="font-size:10.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+  mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:black">）</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+</tbody></table>
+
+<p class="MsoNormal" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 6pt;"><span lang="EN-US">&nbsp;</span></p>
+
+<p class="MsoNormal" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 9pt; line-height: 150%;">回測方式很單純，使用<span lang="EN-US">
+Excel </span>就可以做到。那麼，這個策略的市場擇時（<span lang="EN-US">Market timing</span>）效果，究竟如何呢？<span lang="EN-US"><o:p></o:p></span></p>
+
+<h1><font style="font-size: 22px;"><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;
+mso-hansi-font-family:Calibri">四、回測方法：用</span><span lang="EN-US"> Excel </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
+Calibri">就能做</span></font><span lang="EN-US"><o:p></o:p></span></h1>
+
+<p class="MsoNormal" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 9pt; line-height: 150%;">下面是回測用的<span lang="EN-US">
+Excel </span>大概的樣子。第一張圖是每日的原始數據：<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" align="center" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin: 6pt 0cm 3pt; text-align: center; break-after: avoid;"><img src="assets/images/2026-10-25-4-tactical-volatility-strategy/img-6.png" alt=""></p>
+
+<p class="MsoNormal" align="center" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 12pt; text-align: center;"><span style="font-size: 9pt; color: rgb(89, 89, 89);">圖</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959"> 6</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">　回測用</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959">
+Excel</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">：每日價格與</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959">
+VX30:VIX Roll yield</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoListParagraph" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin: 0cm 0cm 5pt 27pt; text-indent: -13.5pt; line-height: 150%;"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><!--[endif]-->波動率投資策略所需的資產每日收盤價格，部分價格使用<span lang="EN-US"> VTS </span>提供之模擬資料，範圍取<span lang="EN-US"> 2004 </span>年<span lang="EN-US"> 12 </span>月至<span lang="EN-US"> 2025 </span>年<span lang="EN-US"> 6 </span>月底。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoListParagraph" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin: 0cm 0cm 5pt 27pt; text-indent: -13.5pt; line-height: 150%;"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><!--[endif]-->作為比較基準的資產每日收盤價格，範圍取<span lang="EN-US"> 2004 </span>年<span lang="EN-US"> 3 </span>月至<span lang="EN-US"> 2025 </span>年<span lang="EN-US"> 6 </span>月底。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoListParagraph" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin: 0cm 0cm 5pt 27pt; text-indent: -13.5pt; line-height: 150%;"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><!--[endif]--><span lang="EN-US">VX30:VIX Roll yield </span>基於每日<span lang="EN-US"> VIX </span>期貨收盤價計算。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoListParagraph" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin: 0cm 0cm 9pt 27pt; text-indent: -13.5pt; line-height: 150%;"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><!--[endif]-->百分位數採用滾動計算，只用到當天以前的歷史數據，以避免前視偏誤（<span lang="EN-US">Look-ahead bias</span>）。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 9pt; line-height: 150%;">第二張圖則是策略的每日持有資產與績效：<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" align="center" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin: 6pt 0cm 3pt; text-align: center; break-after: avoid;"><img src="assets/images/2026-10-25-4-tactical-volatility-strategy/img-7.png" alt=""></p>
+
+<p class="MsoNormal" align="center" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 12pt; text-align: center;"><span style="font-size: 9pt; color: rgb(89, 89, 89);">圖</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959"> 7</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">　回測用</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959">
+Excel</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">：每日持有資產、報酬率與回撤</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoListParagraph" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin: 0cm 0cm 5pt 27pt; text-indent: -13.5pt; line-height: 150%;"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><!--[endif]-->每日持有資產：依前一天的訊號決定。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoListParagraph" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin: 0cm 0cm 5pt 27pt; text-indent: -13.5pt; line-height: 150%;"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><!--[endif]-->每日報酬率：以資產前後兩天收盤價計算。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoListParagraph" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin: 0cm 0cm 9pt 27pt; text-indent: -13.5pt; line-height: 150%;"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><!--[endif]-->累積報酬率、距前高回撤、年度報酬率：由每日報酬率累計而得。<span lang="EN-US"><o:p></o:p></span></p>
+
+<div style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; border-width: medium medium medium 2.25pt; border-style: none none none solid; border-color: currentcolor currentcolor currentcolor rgb(191, 191, 191); border-image: none; padding: 0cm 0cm 0cm 12pt; margin-left: 18pt; margin-right: 0cm;">
+
+<p class="MsoNormal" style="margin-top:6.0pt;margin-right:0cm;margin-bottom:12.0pt;
+margin-left:0cm;line-height:133%;border:none;mso-border-left-alt:solid #BFBFBF 2.25pt;
+padding:0cm;mso-padding-alt:0cm 0cm 0cm 12.0pt"><span style="font-size: 10.5pt; line-height: 133%; color: rgb(89, 89, 89); background-color: rgb(251, 243, 35);">註：此歷史回測分析並未考量交易成本和滑價，只能算是最粗淺的分析，不等於實際交易情形。實際交易情形會需要考慮諸如「隔天開盤跳空」的情形，報酬率就會和表格上有所差異，千萬不要只以單一指標就作為進出場依據。</span><span lang="EN-US"><o:p></o:p></span></p>
+
+</div>
+
+<h1 style="font-family: 微軟正黑體, sans-serif; margin-top: 0cm; break-before: page;"><font style="font-size: 22px;">五、策略歷史回測綜合比較</font><span lang="EN-US" style="font-size: 9.5pt;"><o:p></o:p></span></h1>
+
+<p class="MsoNormal" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 9pt; line-height: 150%;">比較對象包含：大盤（<span lang="EN-US">SPXTR</span>）、買入並持有<span lang="EN-US">
+SSO</span>、買入並持有<span lang="EN-US"> SVXY</span>、買入並持有<span lang="EN-US"> SVIX</span>，以及兩組輪換策略：<span lang="EN-US">SVXY+GLD+VXZ
+</span>與<span lang="EN-US"> SVIX+GLD+VXZ</span>。下表為綜合指標（數據截至<span lang="EN-US"> 2025/6/26</span>，綠色為最佳、紅色為最差）：<span lang="EN-US"><o:p></o:p></span></p>
+
+<table class="MsoNormalTable" border="1" cellspacing="0" cellpadding="0" width="602" style="width:451.3pt;border-collapse:collapse;border:none;mso-border-alt:solid windowtext .5pt;
+ mso-yfti-tbllook:1184;mso-padding-alt:0cm .5pt 0cm .5pt;mso-border-insideh:
+ .5pt solid windowtext;mso-border-insidev:.5pt solid windowtext">
+ <thead>
+  <tr>
+   <td width="100" valign="top" style="width:75.1pt;border:solid #BFBFBF 1.0pt;
+   mso-border-alt:solid #BFBFBF .5pt;background:#1F4E79;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+   <p class="MsoNormal"><span lang="EN-US">&nbsp;</span></p>
+   </td>
+   <td width="84" valign="top" style="width:62.7pt;border:solid #BFBFBF 1.0pt;
+   border-left:none;mso-border-left-alt:solid #BFBFBF .5pt;mso-border-alt:solid #BFBFBF .5pt;
+   background:#1F4E79;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+   <p class="MsoNormal" align="center" style="text-align:center"><b><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:white">Benchmark:
+   SPXTR</span></b><span lang="EN-US"><o:p></o:p></span></p>
+   </td>
+   <td width="84" valign="top" style="width:62.7pt;border:solid #BFBFBF 1.0pt;
+   border-left:none;mso-border-left-alt:solid #BFBFBF .5pt;mso-border-alt:solid #BFBFBF .5pt;
+   background:#1F4E79;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+   <p class="MsoNormal" align="center" style="text-align:center"><b><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:white">Buy
+   &amp; Hold SSO</span></b><span lang="EN-US"><o:p></o:p></span></p>
+   </td>
+   <td width="84" valign="top" style="width:62.7pt;border:solid #BFBFBF 1.0pt;
+   border-left:none;mso-border-left-alt:solid #BFBFBF .5pt;mso-border-alt:solid #BFBFBF .5pt;
+   background:#1F4E79;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+   <p class="MsoNormal" align="center" style="text-align:center"><b><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:white">Buy
+   &amp; Hold SVXY</span></b><span lang="EN-US"><o:p></o:p></span></p>
+   </td>
+   <td width="84" valign="top" style="width:62.7pt;border:solid #BFBFBF 1.0pt;
+   border-left:none;mso-border-left-alt:solid #BFBFBF .5pt;mso-border-alt:solid #BFBFBF .5pt;
+   background:#1F4E79;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+   <p class="MsoNormal" align="center" style="text-align:center"><b><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:white">Buy
+   &amp; Hold SVIX</span></b><span lang="EN-US"><o:p></o:p></span></p>
+   </td>
+   <td width="84" valign="top" style="width:62.7pt;border:solid #BFBFBF 1.0pt;
+   border-left:none;mso-border-left-alt:solid #BFBFBF .5pt;mso-border-alt:solid #BFBFBF .5pt;
+   background:#1F4E79;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+   <p class="MsoNormal" align="center" style="text-align:center"><b><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:white">SVXY+GLD+VXZ
+   </span></b><b><span style="font-size:9.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+   mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:white">輪換策略</span></b><span lang="EN-US"><o:p></o:p></span></p>
+   </td>
+   <td width="84" valign="top" style="width:62.7pt;border:solid #BFBFBF 1.0pt;
+   border-left:none;mso-border-left-alt:solid #BFBFBF .5pt;mso-border-alt:solid #BFBFBF .5pt;
+   background:#1F4E79;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+   <p class="MsoNormal" align="center" style="text-align:center"><b><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:white">SVIX+GLD+VXZ
+   </span></b><b><span style="font-size:9.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+   mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:white">輪換策略</span></b><span lang="EN-US"><o:p></o:p></span></p>
+   </td>
+  </tr>
+ </thead>
+ <tbody><tr style="mso-yfti-irow:1;page-break-inside:avoid">
+  <td width="100" valign="top" style="width:75.1pt;border:solid #BFBFBF 1.0pt;
+  border-top:none;mso-border-top-alt:solid #BFBFBF .5pt;mso-border-alt:solid #BFBFBF .5pt;
+  background:white;mso-background-themecolor:background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal"><b><span style="font-size:9.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+  mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:black">年化報酬率</span></b><b><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:black">
+  CAGR</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="84" valign="top" style="width:62.7pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:black">10.6%</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="84" valign="top" style="width:62.7pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:black">13.3%</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="84" valign="top" style="width:62.7pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:black">9.8%</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="84" valign="top" style="width:62.7pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><b><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#C0392B">8.6%</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="84" valign="top" style="width:62.7pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:black">29.2%</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="84" valign="top" style="width:62.7pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><b><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#1E8449">46.5%</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr style="mso-yfti-irow:2;page-break-inside:avoid">
+  <td width="100" valign="top" style="width:75.1pt;border:solid #BFBFBF 1.0pt;
+  border-top:none;mso-border-top-alt:solid #BFBFBF .5pt;mso-border-alt:solid #BFBFBF .5pt;
+  background:white;mso-background-themecolor:background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal"><b><span style="font-size:9.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+  mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:black">年化標準差</span></b><b><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:black">
+  Std</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="84" valign="top" style="width:62.7pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:black">19.7%</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="84" valign="top" style="width:62.7pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:black">38.8%</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="84" valign="top" style="width:62.7pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:black">36.6%</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="84" valign="top" style="width:62.7pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><b><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#C0392B">67.1%</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="84" valign="top" style="width:62.7pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:black">25.6%</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="84" valign="top" style="width:62.7pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:black">40.0%</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr style="mso-yfti-irow:3;page-break-inside:avoid">
+  <td width="100" valign="top" style="width:75.1pt;border:solid #BFBFBF 1.0pt;
+  border-top:none;mso-border-top-alt:solid #BFBFBF .5pt;mso-border-alt:solid #BFBFBF .5pt;
+  background:white;mso-background-themecolor:background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal"><b><span style="font-size:9.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+  mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:black">夏普值</span></b><b><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:black">
+  Sharpe</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="84" valign="top" style="width:62.7pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:black">0.46</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="84" valign="top" style="width:62.7pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:black">0.30</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="84" valign="top" style="width:62.7pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:black">0.23</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="84" valign="top" style="width:62.7pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><b><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#C0392B">0.11</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="84" valign="top" style="width:62.7pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:black">1.08</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="84" valign="top" style="width:62.7pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><b><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#1E8449">1.12</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr style="mso-yfti-irow:4;page-break-inside:avoid">
+  <td width="100" valign="top" style="width:75.1pt;border:solid #BFBFBF 1.0pt;
+  border-top:none;mso-border-top-alt:solid #BFBFBF .5pt;mso-border-alt:solid #BFBFBF .5pt;
+  background:white;mso-background-themecolor:background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal"><b><span style="font-size:9.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+  mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:black">歷史最大回撤</span></b><b><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:black">
+  Historical MDD</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="84" valign="top" style="width:62.7pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:black">55.3%</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="84" valign="top" style="width:62.7pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:black">85.5%</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="84" valign="top" style="width:62.7pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:black">72.0%</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="84" valign="top" style="width:62.7pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><b><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#C0392B">92.6%</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="84" valign="top" style="width:62.7pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><b><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#1E8449">42.1%</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="84" valign="top" style="width:62.7pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:black">66.1%</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr style="mso-yfti-irow:5;mso-yfti-lastrow:yes;page-break-inside:avoid">
+  <td width="100" valign="top" style="width:75.1pt;border:solid #BFBFBF 1.0pt;
+  border-top:none;mso-border-top-alt:solid #BFBFBF .5pt;mso-border-alt:solid #BFBFBF .5pt;
+  background:white;mso-background-themecolor:background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal"><b><span style="font-size:9.0pt;font-family:&quot;微軟正黑體&quot;,sans-serif;
+  mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;color:black">單日最大回撤</span></b><b><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:black">
+  Daily MDD</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="84" valign="top" style="width:62.7pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><b><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#1E8449">12.0%</span></b><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="84" valign="top" style="width:62.7pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:black">23.4%</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="84" valign="top" style="width:62.7pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:black">48.1%</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="84" valign="top" style="width:62.7pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:black">41.7%</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="84" valign="top" style="width:62.7pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:black">15.3%</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+  <td width="84" valign="top" style="width:62.7pt;border-top:none;border-left:none;
+  border-bottom:solid #BFBFBF 1.0pt;border-right:solid #BFBFBF 1.0pt;
+  mso-border-top-alt:solid #BFBFBF .5pt;mso-border-left-alt:solid #BFBFBF .5pt;
+  mso-border-alt:solid #BFBFBF .5pt;background:white;mso-background-themecolor:
+  background1;padding:3.5pt 4.5pt 3.5pt 4.5pt">
+  <p class="MsoNormal" align="center" style="text-align:center"><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:black">25.6%</span><span lang="EN-US"><o:p></o:p></span></p>
+  </td>
+ </tr>
+</tbody></table>
+
+<p class="MsoNormal" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 9pt; line-height: 150%;">接著是逐年的報酬率比較：<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" align="center" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin: 6pt 0cm 3pt; text-align: center; break-after: avoid;"><img src="assets/images/2026-10-25-4-tactical-volatility-strategy/img-8.png" alt=""></p>
+
+<p class="MsoNormal" align="center" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 12pt; text-align: center;"><span style="font-size: 9pt; color: rgb(89, 89, 89);">圖</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959"> 8</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">　年度報酬率比較（數據截至</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959">
+2025/6/26</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">）</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 9pt; line-height: 150%;">先看買入並持有的情形。下面兩張圖是歷史績效與最大回撤，其中藍色為<span lang="EN-US"> SPXTR</span>、黃色為<span lang="EN-US"> SSO</span>、綠色為<span lang="EN-US">
+SVXY</span>、紅色為<span lang="EN-US"> SVIX</span>：<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" align="center" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin: 6pt 0cm 3pt; text-align: center; break-after: avoid;"><img src="assets/images/2026-10-25-4-tactical-volatility-strategy/img-9.png" alt=""></p>
+
+<p class="MsoNormal" align="center" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 12pt; text-align: center;"><span style="font-size: 9pt; color: rgb(89, 89, 89);">圖</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959"> 9</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">　買入並持有的歷史績效（對數座標）</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" align="center" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin: 6pt 0cm 3pt; text-align: center; break-after: avoid;"><img src="assets/images/2026-10-25-4-tactical-volatility-strategy/img-10.png" alt=""></p>
+
+<p class="MsoNormal" align="center" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 12pt; text-align: center;"><span style="font-size: 9pt; color: rgb(89, 89, 89);">圖</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959"> 10</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">　買入並持有的最大回撤比較（顏色同圖</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959">
+9</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">）</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 9pt; line-height: 150%;">再看加入輪換策略之後。圖中標示三個時期：金融海嘯、新冠疫情與<span lang="EN-US"> FED </span>暴力升息。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" align="center" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin: 6pt 0cm 3pt; text-align: center; break-after: avoid;"><img src="assets/images/2026-10-25-4-tactical-volatility-strategy/img-11.png" alt=""></p>
+
+<p class="MsoNormal" align="center" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 12pt; text-align: center;"><span style="font-size: 9pt; color: rgb(89, 89, 89);">圖</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959"> 11</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">　輪換策略的歷史績效（對數座標）</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoNormal" align="center" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin: 6pt 0cm 3pt; text-align: center; break-after: avoid;"><img src="assets/images/2026-10-25-4-tactical-volatility-strategy/img-12.png" alt=""></p>
+
+<p class="MsoNormal" align="center" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 12pt; text-align: center;"><span style="font-size: 9pt; color: rgb(89, 89, 89);">圖</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959"> 12</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">　輪換策略的最大回撤比較（藍：</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959">SPXTR</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">、黃：</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959">SSO</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">、綠：</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959">SVXY+GLD+VXZ</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">、紅：</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959">SVIX+GLD+VXZ</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">）</span><span lang="EN-US"><o:p></o:p></span></p>
+
+<h1 style="font-family: 微軟正黑體, sans-serif;"><font style="font-size: 22px;">六、心得感想</font><span lang="EN-US" style="font-size: 9.5pt;"><o:p></o:p></span></h1>
+
+<p class="MsoListParagraph" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin: 0cm 0cm 5pt 27pt; text-indent: -13.5pt; line-height: 150%;"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><!--[endif]-->可以看到，波動率投資策略在金融海嘯、新冠疫情的大空頭時期都有傑出的表現，甚至<span lang="EN-US"> 2020 </span>年還逆勢獲利。唯一比較大的失常是<span lang="EN-US"> 2022 </span>年，很大的原因是當年幾乎所有資產價格表現都不好，連黃金也是。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoListParagraph" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin: 0cm 0cm 5pt 27pt; text-indent: -13.5pt; line-height: 150%;"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><!--[endif]-->使用波動率戰術資產配置策略，能夠有效降低長期持有<span lang="EN-US"> VIX </span>期貨反向型<span lang="EN-US">
+ETP </span>遭遇波動率末日的風險，報酬率大幅提升，同時也有效降低波動性。<span lang="EN-US"><o:p></o:p></span></p>
+
+<p class="MsoListParagraph" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin: 0cm 0cm 5pt 27pt; text-indent: -13.5pt; line-height: 150%;"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><!--[endif]-->雖然年化報酬率遠超長期持有大盤和大盤槓桿型<span lang="EN-US"> ETF</span>，夏普值也顯著提高，但觀察波動性依舊非常可觀，需要一定程度的風險承受能力與心理建設。</p><p class="MsoListParagraph" style="font-family: 微軟正黑體, sans-serif; margin: 0cm 0cm 5pt 27pt; text-indent: -13.5pt; line-height: 150%;"><span style="font-size: 9.5pt;">•</span><font style="font-size: 13px;"><span style="font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp; &nbsp;</span><span style="font-family: &quot;Noto Sans TC&quot;, sans-serif;"><span style="font-family: 微軟正黑體, sans-serif;">如果無法忍受資產遭遇空頭時腰斬的可能性，</span><span lang="EN-US" style="font-family: Calibri, sans-serif;">SVXY+GLD+VXZ </span><span style="font-family: 微軟正黑體, sans-serif;">會是較適合也足夠優秀的輪換組合（歷史最大回撤</span><span lang="EN-US" style="font-family: Calibri, sans-serif;"> 42.1%</span><span style="font-family: 微軟正黑體, sans-serif;">，比大盤還低）。然而本於生命週期投資法的理念，我當下是選擇</span><span lang="EN-US" style="font-family: Calibri, sans-serif;"> SVIX+GLD+VXZ </span><span style="font-family: 微軟正黑體, sans-serif;">的方式，爭取最大的年化報酬率機會（但也不打算配置超過總資產</span><span lang="EN-US" style="font-family: Calibri, sans-serif;"> 20%</span><span style="font-family: 微軟正黑體, sans-serif;">），可能會在年屆退休之際再考慮轉成</span><span lang="EN-US" style="font-family: Calibri, sans-serif;"> SVXY</span><span style="font-family: 微軟正黑體, sans-serif;">。</span></span></font></p></div>
+  </article>
+
+  <footer>
+    <p class="disclaimer">本網站與所連結頁面之內容僅為個人資料整理與策略追蹤工具,不構成任何投資建議。</p>
+    <div class="links"><span id="footYear"></span></div>
+  </footer>
+</div>
+
+<script>
+  document.getElementById('footYear').textContent = new Date().getFullYear() + ' · Personal Project';
+</script>
+
+</body>
+</html>
