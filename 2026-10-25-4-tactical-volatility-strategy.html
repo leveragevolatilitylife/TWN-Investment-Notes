@@ -47,7 +47,7 @@
     <p class="lead">前三章我們依序認識了 VIX 指數、VIX 期貨與相關 ETP，也看到做空 VIX 既有長期正價差的優勢，卻也背著波動率末日的風險。這一章是整個系列的重頭戲：把上一章預告的輪換策略，拿到十幾年的歷史數據上回測，看看它究竟表現如何。 本章分三個部分：先介紹推升VIX 反向型 ETP 的真正作用力，也就是 VX30的滾動收益率；接著說明衡量策略好壞的指標；最後是策略的規則、回測方法與歷史回測的綜合比較。</p>
     <p class="MsoNormal" style="text-align: center; margin-bottom: 3pt;"><font color="#c7a78b" style="font-size: 15.5px;"><span style="font-family: 微軟正黑體, sans-serif;"><b style="">免責聲明</b></span><span lang="EN-US" style=""><o:p></o:p></span></font></p>
 
-<div style="font-family: 微軟正黑體, sans-serif; text-align: justify;"><span style="color: rgb(199, 167, 139);"><font style="font-size: 15.5px;">本文僅為個人研究與經驗分享，非任何形式之投資建議或承諾。所有金融商品皆具一定程度風險，可能導致重大虧損，讀者須自行評估並負擔個人決策全部後果。內容所涉標的僅供參考，過往績效不代表未來表現。本人不對任何依據本文進行之投資行為負責，請務必審慎判斷。</font></span></div><div style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; text-align: justify;"><span style="color: rgb(199, 167, 139); font-size: 9.5pt;"><br></span></div><div style="text-align: justify;"><h1><font style="font-size: 22px;"><span style="font-family: 微軟正黑體, sans-serif;">一、</span><span lang="EN-US" style="">VIX </span><span style="font-family: 微軟正黑體, sans-serif;">反向型</span><span lang="EN-US" style=""> ETP的推升動力&nbsp;</span><span style="font-family: 微軟正黑體, sans-serif;">：</span><span lang="EN-US" style="">VX30:VIX</span><span style="font-family: 微軟正黑體, sans-serif;">滾動收益率</span></font><span lang="EN-US"><o:p></o:p></span></h1><div><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
+<div style="font-family: 微軟正黑體, sans-serif; text-align: justify;"><span style="color: rgb(199, 167, 139);"><font style="font-size: 15.5px;">本文僅為個人研究與經驗分享，非任何形式之投資建議或承諾。所有金融商品皆具一定程度風險，可能導致重大虧損，讀者須自行評估並負擔個人決策全部後果。內容所涉標的僅供參考，過往績效不代表未來表現。本人不對任何依據本文進行之投資行為負責，請務必審慎判斷。</font></span></div><div style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; text-align: justify;"><span style="color: rgb(199, 167, 139); font-size: 9.5pt;"><br></span></div><div style="text-align: justify;"><h2><font style="font-size: 22px;"><span style="font-family: 微軟正黑體, sans-serif;">一、</span><span lang="EN-US" style="">VIX </span><span style="font-family: 微軟正黑體, sans-serif;">反向型</span><span lang="EN-US" style=""> ETP的推升動力&nbsp;</span><span style="font-family: 微軟正黑體, sans-serif;">：</span><span lang="EN-US" style="">VX30:VIX</span><span style="font-family: 微軟正黑體, sans-serif;">滾動收益率</span></font><span lang="EN-US"><o:p></o:p></span></h2><div><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:
 Calibri;mso-hansi-font-family:Calibri"><br></span></div>
 
 <p class="MsoNormal" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 9pt; line-height: 150%;">第二章提到，<span lang="EN-US">VIX
@@ -372,8 +372,8 @@ VIX</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">（</span><span 
 
 <p class="MsoNormal" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 9pt; line-height: 150%;">接著，我們就準備進入這個系列文最終的重頭戲：波動率投資策略的歷史回測。<span lang="EN-US"><o:p></o:p></span></p>
 
-<h1><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;
-mso-hansi-font-family:Calibri"><font style="font-size: 22px;">二、如何衡量策略的好壞</font></span><span lang="EN-US"><o:p></o:p></span></h1><div><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;
+<h2><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;
+mso-hansi-font-family:Calibri"><font style="font-size: 22px;">二、如何衡量策略的好壞</font></span><span lang="EN-US"><o:p></o:p></span></h2><div><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;
 mso-hansi-font-family:Calibri"><br></span></div>
 
 <p class="MsoNormal" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 9pt; line-height: 150%;">在看投資策略的歷史回測之前，我們需要先認識以下幾個指標：年化報酬率、年化標準差、夏普值與最大回撤。<span lang="EN-US"><o:p></o:p></span></p>
@@ -384,8 +384,8 @@ mso-hansi-font-family:Calibri"><br></span></div>
 
 <p class="MsoNormal" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 9pt; line-height: 150%;">這裡再補充兩點：夏普值公式中的無風險利率<span lang="EN-US"> Rf</span>，在本文回測中設為<span lang="EN-US"> 1.5%</span>；除了最大回撤(<span lang="EN-US">MDD)</span>，後面的比較還會看「單日最大回撤」(<span lang="EN-US">Daily MDD)</span>，也就是單日最大的跌幅，用來看極端單日風險。<span lang="EN-US"><o:p></o:p></span></p>
 
-<h1><font style="font-size: 22px;"><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;
-mso-hansi-font-family:Calibri">三、波動率戰術資產配置策略(</span><span lang="EN-US">VTS<font face="微軟正黑體, sans-serif">)</font></span></font></h1>
+<h2><font style="font-size: 22px;"><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;
+mso-hansi-font-family:Calibri">三、波動率戰術資產配置策略(</span><span lang="EN-US">VTS<font face="微軟正黑體, sans-serif">)</font></span></font></h2>
 
 <p class="MsoNormal" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 9pt; line-height: 150%;">這裡要介紹的，正是前一章提到的<span lang="EN-US"> VTS</span>：<span lang="EN-US">Brent Osachoff </span>所提出的資產輪換策略。他的策略有專屬的波動率評估指標作為判斷依據(稱為<span lang="EN-US"> Volatility Barometer</span>，這是他的商業機密)，但我們可以從他分享的公開資訊，拿<span lang="EN-US"> VX30:VIX Roll yield </span>作為最基礎的策略指標。<span lang="EN-US"><o:p></o:p></span></p>
 
@@ -490,9 +490,9 @@ Tactical Volatility Strategy</span><span style="font-size: 9pt; color: rgb(89, 8
 <p class="MsoNormal" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 9pt; line-height: 150%;">回測方式很單純，使用<span lang="EN-US">
 Excel </span>就可以做到。那麼，這個策略的市場擇時（<span lang="EN-US">Market timing</span>）效果，究竟如何呢？<span lang="EN-US"><o:p></o:p></span></p>
 
-<h1><font style="font-size: 22px;"><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;
+<h2><font style="font-size: 22px;"><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;
 mso-hansi-font-family:Calibri">四、回測方法：用</span><span lang="EN-US"> Excel </span><span style="font-family:&quot;微軟正黑體&quot;,sans-serif;mso-ascii-font-family:Calibri;mso-hansi-font-family:
-Calibri">就能做</span></font><span lang="EN-US"><o:p></o:p></span></h1>
+Calibri">就能做</span></font><span lang="EN-US"><o:p></o:p></span></h2>
 
 <p class="MsoNormal" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 9pt; line-height: 150%;">下面是回測用的<span lang="EN-US">
 Excel </span>大概的樣子。第一張圖是每日的原始數據：<span lang="EN-US"><o:p></o:p></span></p>
@@ -539,7 +539,7 @@ padding:0cm;mso-padding-alt:0cm 0cm 0cm 12.0pt"><span style="font-size: 10.5pt; 
 
 </div>
 
-<h1 style="font-family: 微軟正黑體, sans-serif; margin-top: 0cm; break-before: page;"><font style="font-size: 22px;">五、策略歷史回測綜合比較</font><span lang="EN-US" style="font-size: 9.5pt;"><o:p></o:p></span></h1>
+<h2 style="font-family: 微軟正黑體, sans-serif; margin-top: 0cm; break-before: page;"><font style="font-size: 22px;">五、策略歷史回測綜合比較</font><span lang="EN-US" style="font-size: 9.5pt;"><o:p></o:p></span></h2>
 
 <p class="MsoNormal" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 9pt; line-height: 150%;">比較對象包含：大盤（<span lang="EN-US">SPXTR</span>）、買入並持有<span lang="EN-US">
 SSO</span>、買入並持有<span lang="EN-US"> SVXY</span>、買入並持有<span lang="EN-US"> SVIX</span>，以及兩組輪換策略：<span lang="EN-US">SVXY+GLD+VXZ
@@ -880,7 +880,7 @@ SVXY</span>、紅色為<span lang="EN-US"> SVIX</span>：<span lang="EN-US"><o:p
 
 <p class="MsoNormal" align="center" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin-bottom: 12pt; text-align: center;"><span style="font-size: 9pt; color: rgb(89, 89, 89);">圖</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959"> 12</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">　輪換策略的最大回撤比較（藍：</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959">SPXTR</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">、黃：</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959">SSO</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">、綠：</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959">SVXY+GLD+VXZ</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">、紅：</span><span lang="EN-US" style="font-size:9.0pt;mso-fareast-font-family:微軟正黑體;color:#595959">SVIX+GLD+VXZ</span><span style="font-size: 9pt; color: rgb(89, 89, 89);">）</span><span lang="EN-US"><o:p></o:p></span></p>
 
-<h1 style="font-family: 微軟正黑體, sans-serif;"><font style="font-size: 22px;">六、心得感想</font><span lang="EN-US" style="font-size: 9.5pt;"><o:p></o:p></span></h1>
+<h2 style="font-family: 微軟正黑體, sans-serif;"><font style="font-size: 22px;">六、心得感想</font><span lang="EN-US" style="font-size: 9.5pt;"><o:p></o:p></span></h2>
 
 <p class="MsoListParagraph" style="font-family: 微軟正黑體, sans-serif; font-size: 9.5pt; margin: 0cm 0cm 5pt 27pt; text-indent: -13.5pt; line-height: 150%;"><!--[if !supportLists]--><span lang="EN-US">•<span style="font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 7pt; line-height: normal; font-family: &quot;Times New Roman&quot;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </span></span><!--[endif]-->可以看到，波動率投資策略在金融海嘯、新冠疫情的大空頭時期都有傑出的表現，甚至<span lang="EN-US"> 2020 </span>年還逆勢獲利。唯一比較大的失常是<span lang="EN-US"> 2022 </span>年，很大的原因是當年幾乎所有資產價格表現都不好，連黃金也是。<span lang="EN-US"><o:p></o:p></span></p>

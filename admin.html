@@ -6,6 +6,7 @@
 <title>後台發文｜投資筆記</title>
 <link rel="icon" href="avatar.jpg">
 <meta name="theme-color" content="#0a0e14">
+<meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -872,6 +873,11 @@
         img.setAttribute('src', path);
         img.removeAttribute('style');
       }
+      Array.prototype.slice.call(tmp.querySelectorAll('h1')).forEach(function(h){
+        const n = document.createElement('h2');
+        Array.prototype.slice.call(h.attributes).forEach(function(a){ n.setAttribute(a.name, a.value); });
+        n.innerHTML = h.innerHTML; h.parentNode.replaceChild(n, h);
+      });
       const contentHtml = tmp.innerHTML;
 
       // 建立文章 HTML 並上傳
@@ -967,10 +973,10 @@
     const sorted = currentPosts.slice().sort(function(a,b){ return new Date(b.date) - new Date(a.date); });
     manageListEl.innerHTML = sorted.map(function(p){
       return (
-        '<div class="manage-item' + (p.hidden ? ' is-hidden' : '') + '" data-slug="' + p.slug + '">' +
+        '<div class="manage-item' + (p.hidden ? ' is-hidden' : '') + '" data-slug="' + esc(p.slug) + '">' +
           '<div class="mi-info">' +
             '<div class="mi-title">' + esc(p.title) + (p.hidden ? '(已隱藏)' : '') + '</div>' +
-            '<div class="mi-meta">' + p.date + ' · ' + p.slug + '.html</div>' +
+            '<div class="mi-meta">' + esc(p.date) + ' · ' + esc(p.slug) + '.html</div>' +
           '</div>' +
           '<div class="mi-actions">' +
             '<button type="button" class="btn-edit">編輯</button>' +

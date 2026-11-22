@@ -63,15 +63,16 @@
       }
       posts.sort(function(a,b){ return new Date(b.date) - new Date(a.date); });
 
+      var esc = function(v){ return String(v == null ? '' : v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); };
       list.innerHTML = posts.map(function(p){
-        var tags = (p.tags || []).map(function(t){ return '<span class="tag">' + t + '</span>'; }).join('');
+        var tags = (p.tags || []).map(function(t){ return '<span class="tag">' + esc(t) + '</span>'; }).join('');
         return (
-          '<a class="note-item" href="' + p.slug + '.html">' +
+          '<a class="note-item" href="' + encodeURIComponent(p.slug) + '.html">' +
             '<div class="row-top">' +
-              '<h2>' + p.title + '</h2>' +
-              '<span class="date">' + p.date + '</span>' +
+              '<h2>' + esc(p.title) + '</h2>' +
+              '<span class="date">' + esc(p.date) + '</span>' +
             '</div>' +
-            '<p class="summary">' + p.summary + '</p>' +
+            '<p class="summary">' + esc(p.summary) + '</p>' +
             '<div class="tags">' + tags + '</div>' +
           '</a>'
         );
