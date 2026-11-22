@@ -768,6 +768,19 @@
 '<meta name="viewport" content="width=device-width, initial-scale=1">\n' +
 '<title>' + esc(opts.title) + '｜投資筆記｜Yung\'s Journey to FIRE</title>\n' +
 '<meta name="description" content="' + esc(opts.summary) + '">\n' +
+'<meta property="og:type" content="article">\n' +
+'<meta property="og:site_name" content="Yung\'s Journey to FIRE">\n' +
+'<meta property="og:locale" content="zh_TW">\n' +
+'<meta property="og:title" content="' + esc(opts.title) + '">\n' +
+'<meta property="og:description" content="' + esc(opts.summary) + '">\n' +
+'<meta property="og:url" content="https://leveragevolatilitylife.github.io/TWN-Investment-Notes/' + encodeURIComponent(opts.slug) + '.html">\n' +
+'<meta property="og:image" content="https://leveragevolatilitylife.github.io/og-image.png">\n' +
+'<meta property="og:image:width" content="1200">\n' +
+'<meta property="og:image:height" content="630">\n' +
+'<meta name="twitter:card" content="summary_large_image">\n' +
+'<meta name="twitter:title" content="' + esc(opts.title) + '">\n' +
+'<meta name="twitter:description" content="' + esc(opts.summary) + '">\n' +
+'<meta name="twitter:image" content="https://leveragevolatilitylife.github.io/og-image.png">\n' +
 '<link rel="icon" href="avatar.jpg">\n' +
 '<meta name="theme-color" content="#0a0e14">\n' +
 '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
@@ -882,7 +895,7 @@
 
       // 建立文章 HTML 並上傳
       showStatus('busy', isEdit ? '正在更新文章頁面…' : '正在建立文章頁面…');
-      const postHtml = buildPostHtml({ title: title, date: dateStr, tagsText: tags.join('、'), summary: summary, contentHtml: contentHtml });
+      const postHtml = buildPostHtml({ slug: slug, title: title, date: dateStr, tagsText: tags.join('、'), summary: summary, contentHtml: contentHtml });
       await ghPutFile(cfg, slug + '.html', utf8ToBase64(postHtml), (isEdit ? '更新文章: ' : '新增文章: ') + title, existingPostSha);
 
       // 更新 posts.json
